@@ -26,6 +26,10 @@ def menu():
 def sort():
     return render_template('sort.html')
 
+@app.route('/game')
+def game():
+    return render_template('game_template.html')
+    
 @app.route('/memory/color')
 def color_memory():
     return render_template('color_memory.html')
