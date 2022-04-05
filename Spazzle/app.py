@@ -34,6 +34,10 @@ def game():
 def color_memory():
     return render_template('color_memory.html')
     
+@app.route('/stats')
+def stats():
+    return render_template('stats.html')
+
 @app.route('/addition/base')
 def addition():
     return render_template('addition.html')
