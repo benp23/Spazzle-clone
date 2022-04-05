@@ -1,0 +1,43 @@
+#heading_table {
+    width: 100%;
+    margin-top: 50px;
+}
+
+#heading_row {
+    font-size: 25px;
+}
+
+#button_cell {
+    width: 25%;
+}
+
+#quit_button {
+    font-size: inherit;
+}
+
+#game_heading {
+    width: 50%;
+}
+
+#game_timer {
+    width: 25%;
+}
+
+#game_canvas {
+    width: 90%;
+    height: calc(100vh - 200px);
+    margin: 5px auto 5px auto;
+    display: block;
+}
+
+#answer_inline {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    margin: 5px 0 5px 0;
+}
+
+#answer_text {
+    margin-left: 10px;
+    display: none;
+}
