@@ -1,10 +1,81 @@
-<html>
-	<head>
-		<title>{{ title }} </title>
-	</head>
-	<body>
-		<h1> Hello All</h1>
-		<a href = "{{ url_for('game') }}">Game</a>
-		<a href = "{{ url_for('stats') }}">Statistics</a>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Spazzle</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Arbutus+Slab">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+		<div id="username_modal">
+			<div class="modal_content">
+				<div class="modal_header">
+					<span id="close_modal">&times;</span>
+					<h2>Enter Username:</h2>
+			  	</div>
+				<div class="modal_body">
+					<form id="username_form">
+						<label for="username_input" id="username_label"></label>
+						<input id="username_input" placeholder="Username"></input>
+						<button id="start_button">
+							Start Game
+						</button>
+					</form>
+				</div>
+				<div class="modal_footer">
+					<ul id="username_list">
+					</ul>
+			  	</div>
+			</div>
+		</div>
+		<table id="heading_table">
+			<tbody>
+				<tr id="heading_row">
+					<th id="author_cell">
+						<p id="author_text">
+							Created by: Spencer Wheeler, Ben Paul, Troy Scites
+						</p>
+						<button id="github_button">
+							View on Github
+						</button>
+					</th>
+					<th id="title_cell">
+						<span id="title">
+							<p class ="letters" id="letter_s">S</p>
+							<p class ="letters" id="letter_p">p</p>
+							<p class ="letters" id="letter_a">a</p>
+							<p class ="letters" id="letter_z">z</p>
+							<p class ="letters" id="letter_z2">z</p>
+							<p class ="letters" id="letter_l">l</p>
+							<p class ="letters" id="letter_e">e</p>
+						</span>
+						<p id="caption_text">The speed puzzle game that exercises your brain! Climb to top of the leaderboard!</p>
+					</th>
+					<th id="options_cell">
+							<img id="options_icon" src="{{ url_for('static', filename='images/settings.svg') }}"></img>
+							<p id="options_text">Options</p>
+					</th>
+				</tr>
+			</tbody>
+		</table>
+		<table id="menu_table">
+			<tbody>
+				<tr>
+					<td class="menu_item" id="speed_mode">Speed Mode</td>
+					<td id="menu_description" rowspan="4"></td>
+				</tr>
+				<tr>
+					<td class="menu_item" id="level_mode">Level Mode</td>
+				</tr>
+				<tr>
+					<td class="menu_item" id="infinite_mode">Infinite Mode</td>
+				</tr>
+				<tr>
+					<td class="menu_item" id="statistics">Statistics</td>
+				</tr>
+			</tbody>
+		</table>
+        <script src="{{ url_for('static', filename='menu.js') }}"></script>
+    </body>
 </html>
