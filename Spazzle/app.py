@@ -1,20 +1,16 @@
 from flask import Flask, render_template, url_for
-app = Flask(__name__)
+from flask_restful import Resource, Api
+from db_create import db_c
+#from data_spazzle import RegisterUser, User
+from UsersTest import User
 
-posts = [
-    {
-        'author': 'spencer wheeler',
-        'title': 'Flask Practice',
-        'content': 'pracice',
-        'date_posted': 'Apr, 4'
-    },
-    {
-        'author': 'spencer wheeler',
-        'title': 'Flask Practice',
-        'content': 'pracice second',
-        'date_posted': 'Apr, 5'
-    }
-]
+app = Flask(__name__)
+app.config['PROPAGATE_EXCEPTIONS'] = True
+api=Api(app)
+#This is just to create a new db so we can delete other databases while ensuring the data
+#is going through/coming out correctly w/o old objects getting in the way
+db = db_c().create("databank") 
+
 
 @app.route('/')
 @app.route('/home')
@@ -22,29 +18,16 @@ posts = [
 def menu():
     return render_template('menu.html')
 
-@app.route('/sort')
-def sort():
-    return render_template('sort.html')
-
 @app.route('/game')
 def game():
     return render_template('game_template.html')
-    
-@app.route('/memory/color')
-def color_memory():
-    return render_template('color_memory.html')
     
 @app.route('/stats')
 def stats():
     return render_template('stats.html')
 
-@app.route('/addition/base')
-def addition():
-    return render_template('addition.html')
+api.add_resource(User, '/users')
+#api.add_resource(UserRegister, '/users/register') #current functionality is also done by user
 
-@app.route('/addition/animated')
-def addition_animated():
-    return render_template('addition_animated.html')
-    
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
