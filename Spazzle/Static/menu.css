@@ -68,7 +68,7 @@ body {
 .letters {
     font-size: 100px;
     font-weight: bold;
-    font-family: 'Alfa Slab One';
+    font-family: 'Alfa Slab One', sans-serif;
     text-shadow: -2px 2px 4px #7e2199;
     display: inline;
 }
@@ -91,7 +91,7 @@ body {
 
 #options_text {
     font-size: 28px;
-    font-family: 'Arbutus Slab';
+    font-family: 'Arbutus Slab', sans-serif;
     color: #333333;
     vertical-align: middle;
     display: inline;
