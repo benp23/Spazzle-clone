@@ -9,7 +9,8 @@ class db_c:
         try:
             connection = sqlite3.connect(dbname)
             cursor = connection.cursor()
-            create_table = "CREATE TABLE IF NOT EXISTS users(username text)"
+            create_table = '''CREATE TABLE IF NOT EXISTS users(
+                            username TEXT NOT NULL PRIMARY KEY,);'''
             cursor.execute(create_table)
             connection.commit()
             connection.close()
