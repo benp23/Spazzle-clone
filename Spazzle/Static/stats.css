@@ -1,0 +1,123 @@
+body {
+    background-color: #eeeeee;
+}
+
+#user_heading {
+    font: italic 72px 'Arbutus Slab', sans-serif;
+    margin-left: 4vw;
+    color: #333333;
+}
+
+#large_row_container {
+    width: 100%;
+    display: flex;
+}
+
+#form_container {
+    width: 25%;
+}
+
+#highlights_container {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#highlights_heading {
+    font: 36px 'Arbutus Slab', sans-serif;
+    color: #333333;
+    padding-bottom: 20px;
+    padding-right: 150px;
+    border-bottom: 1px solid #333333;
+    margin: 30px auto;
+}
+
+#stats_container {
+    display: flex;
+    width: 45%;
+    justify-content: center;
+    max-height: 500px;
+    overflow-y: scroll;
+    margin: 0 2% 0 2%;
+}
+
+#stat_form {
+    margin: auto;
+    width: 50%;
+    position: relative;
+    top: 100px;
+}
+
+#stat_form:after {
+    content: '^';
+    font: 17px "Consolas", monospace;
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    transform: rotate(180deg);
+    pointer-events: none;
+    background-color: #eeeeee;
+    border: 2px solid;
+    border-radius: 5px 0 0 5px;
+    width: 15%;
+    padding-top: 12px;
+}
+
+
+#stat_select {
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 10px 0 10px 0;
+    width: 100%;
+    border: 2px solid #333333;
+}
+
+#highlights_table {
+    margin: auto;
+    width: 100%;
+}
+
+.highlights_cell {
+    height: 20vh;
+    white-space: nowrap;
+}
+
+.highlights_icon {
+    width: 25px;
+    filter: contrast(0.3);
+    padding-right: 10px;
+}
+
+.highlights_number {
+    font: 42px 'Helvetica', sans-serif;
+}
+
+.highlights_title {
+    color: #555555;
+    text-transform: capitalize;
+    font: 18px 'Helvetica', sans-serif;
+}
+
+
+#stats_table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.stats_row {
+    height: 100px;
+}
+
+.stats_heading {
+    border: 1px solid #1464f6;
+    background-color: #acc7ed;
+}
+
+.stats_cell {
+    border: 1px solid #1464f6;
+    background-color: #ffffff;
+}
