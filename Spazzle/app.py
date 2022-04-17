@@ -9,8 +9,10 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 api=Api(app)
 #This is just to create a new db so we can delete other databases while ensuring the data
 #is going through/coming out correctly w/o old objects getting in the way
-db = db_c().create("databank") 
+#db = db_c().create("dataffbank") 
 
+db = db_c('data')
+db.create()
 
 @app.route('/')
 @app.route('/home')
