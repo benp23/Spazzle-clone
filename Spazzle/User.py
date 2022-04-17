@@ -1,8 +1,19 @@
+"""
+    File: User.py
+    Authors: Spencer Wheeler, Benjamin Paul, Troy Scites
+    Description: Class to make and store user information.
+                Limited functions as of now, will add more later.
+                
+"""
+
 import sqlite3
 from flask_restful import Resource, reqparse
 #using reqparse despite its depreciated status
 
 class User(Resource):
+    """
+    Description: Currently only provides User find functionality. Adding more for interacting as userspecific tables
+    """
     TABLE_NAME = 'user_table'
     
     parser = reqparse.RequestParser()
@@ -20,6 +31,12 @@ class User(Resource):
     
     @classmethod
     def find_user(cls, username):
+        """
+            Description: Returns boolean if user already exists in database.
+            Parameters
+            ----------
+                username: Str, Required, Unique
+        """
         connect = sqlite3.connect('data.db')
         cursor = connect.cursor()
         

@@ -1,9 +1,19 @@
+"""
+    File: Register.py
+    Authors: Spencer Wheeler, Benjamin Paul, Troy Scites
+    Description: Class to make and store user information.
+                Limited functions as of now, will add more later.
+                
+"""
 import sqlite3
 from User import User
 from flask_restful import Resource, reqparse
 #using reqparse despite its depreciated status
 
 class Register(Resource):
+    """
+        Description: Checks and registers username
+    """
     TABLE_NAME = 'user_table'
     
     parser = reqparse.RequestParser()
@@ -13,6 +23,12 @@ class Register(Resource):
     )
     
     def post(self):
+        """
+            Description: Post user information. Will return if username is taken or if successful. No limits on usernames
+            Parameters:
+                username: str, required
+        """
+        
         data = Register.parser.parse_args()
         
         connect = sqlite3.connect('data.db')
