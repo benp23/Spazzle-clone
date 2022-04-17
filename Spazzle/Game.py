@@ -37,26 +37,31 @@ class total_games(Resource):
             username: str, required
             game_run: int, required
             """
-            
         data = total_games.parser.parse_args()
         
         if not User.find_user(data['username']):
             return {"message": "No user was found."}
-            
+        
+        table_name = data['username']+"_"+ self.TABLE_NAME
+        
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
         
-        query = "SELECT * FROM {table} WHERE username=?".format(table=self.TABLE_NAME)
+        query = "SELECT * FROM {table} WHERE game_run =?".format(table = table_name) 
+        #This is going to grab all rows; can specific w/ this lster
         
-        rows = cursor.execute(query, (data['username'],))
+        rows = cursor.execute(query, (data['game_run'],))
         
-        for row in rows:
-            if row[1] == data['game_run']:
-                return {"username": row[0], "game_run":row[1], "total_game_time":row[2]}
+        row = rows.fetchone()
         
-        connection.commit()
+        return {"username": row[0], "game_run":row[1], "total_game_time":row[2]}
+        
+       
         connection.close()
         return {"message": "No Game Found"}
+       
+    def find_game(cls, table_name, game_run):
+        return 
         
     def post(self):
         """Sends game run data to database for storage and further processing
@@ -66,21 +71,29 @@ class total_games(Resource):
             username: str, required
             game_run: int, required
             total_game_time: float, required"""
+        
         data = total_games.parser.parse_args()
         
         if not User.find_user(data['username']):
             return {"message": "No user was found."}
         
+        table_name = data['username']+"_"+self.TABLE_NAME
+        
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
+        
+        query = "SELECT * FROM {table} WHERE game_run=?".format(table = table_name)
+        
 
-        query = "INSERT INTO {table} VALUES (?,?, ?)".format(table=self.TABLE_NAME)
+        query = "INSERT INTO {table} VALUES (?,?, ?)".format(table=table_name)
         cursor.execute(query, (data['username'], data['game_run'], data['total_game_time']))
 
         connection.commit()
         connection.close()
         
         return {"message": "Game Run added"}
+        
+        
         
 class single_games(Resource):
     TABLE_NAME = 'game_total_table'
