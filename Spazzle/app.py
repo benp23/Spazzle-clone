@@ -1,8 +1,10 @@
 from flask import Flask, render_template, url_for
 from flask_restful import Resource, Api
 from db_create import db_c
-#from data_spazzle import RegisterUser, User
-from UsersTest import User
+from User import User
+from Register import Register
+from Game import GamePlay
+
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -11,8 +13,7 @@ api=Api(app)
 #is going through/coming out correctly w/o old objects getting in the way
 #db = db_c().create("dataffbank") 
 
-db = db_c('data')
-db.create()
+db = db_c('data').create()
 
 @app.route('/')
 @app.route('/home')
@@ -29,7 +30,8 @@ def stats():
     return render_template('stats.html')
 
 api.add_resource(User, '/users')
-#api.add_resource(UserRegister, '/users/register') #current functionality is also done by user
+api.add_resource(Register, '/users/register') #current functionality is also done by user
+api.add_resource(GamePlay, '/game/total')
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
