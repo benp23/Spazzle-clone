@@ -3,7 +3,7 @@ from flask_restful import Resource, Api
 from db_create import db_c
 from User import User
 from Register import Register
-from Game import GamePlay
+from Game import total_games
 
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def stats():
 
 api.add_resource(User, '/users')
 api.add_resource(Register, '/users/register') #current functionality is also done by user
-api.add_resource(GamePlay, '/game/total')
+api.add_resource(total_games, '/game/total')
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)

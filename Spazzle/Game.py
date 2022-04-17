@@ -3,7 +3,7 @@ from User import User
 from flask_restful import Resource, reqparse
 #using reqparse despite its depreciated status
 
-class GamePlay(Resource):
+class total_games(Resource):
     TABLE_NAME = 'game_total_table'
 	
     parser = reqparse.RequestParser()
@@ -23,7 +23,7 @@ class GamePlay(Resource):
                         )
 
     def get(self):
-        data = GamePlay.parser.parse_args()
+        data = total_games.parser.parse_args()
         
         if not User.find_user(data['username']):
             return {"message": "No user was found."}
@@ -44,7 +44,7 @@ class GamePlay(Resource):
         return {"message": "No Game Found"}
         
     def post(self):
-        data = GamePlay.parser.parse_args()
+        data = total_games.parser.parse_args()
         
         if not User.find_user(data['username']):
             return {"message": "No user was found."}
