@@ -10,6 +10,7 @@ from sqlite3 import Error
 
 class db_c:
     dbname=''
+    
     def __init__(self, name):
         """Creates the database with passed name"
         Parameters
@@ -21,19 +22,39 @@ class db_c:
         try:
             connection = sqlite3.connect(dbname)
             if connection:
+                create_user_table = '''
+                                CREATE TABLE IF NOT EXISTS user_table
+                                (username TEXT NOT NULL PRIMARY KEY,
+                                ID INTEGER);
+                                '''
+                self.create(create_user_table)
                 connection.close() #closes connection to database
                 return
         except Error:
             return Error
             
-    def create(self):
+    #def create(self):
         """
         Description: Sets up tables when called. Additions may be made for more personalization
         Parameters
         ----------
         None
         """
+    def create(self, table_info):
         try:
+            global dbname
+            connection = sqlite3.connect(dbname)
+            cursor = connection.cursor()
+            cursor.execute(table_info)
+            connection.commit()
+            connection.close()
+            
+        except Error:
+            return Error
+            
+
+"""
+  try:
             global dbname
             connection = sqlite3.connect(dbname)
             cursor = connection.cursor()
@@ -66,5 +87,4 @@ class db_c:
         
         except Error:
             return Error
-       
-      
+       """

@@ -19,7 +19,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 api=Api(app)
 
 #create database for use
-db = db_c('data').create()
+db = db_c('data')
 
 #set hmtl routes
 @app.route('/')
@@ -36,6 +36,14 @@ def game():
 def stats():
     return render_template('stats.html')
 
+@app.route('/gametest')
+def gametest():
+    return render_template('color_memory.html')
+    
+@app.route('/gametest2')
+def gametest2():
+    return render_template('addition.html')
+    
 #set api functionality routes
 api.add_resource(User, '/users')
 api.add_resource(Register, '/users/register') #"username":<string>

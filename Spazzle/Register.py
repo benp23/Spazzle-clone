@@ -8,6 +8,7 @@
 import sqlite3
 from User import User
 from flask_restful import Resource, reqparse
+from db_create import db_c
 #using reqparse despite its depreciated status
 
 class Register(Resource):
@@ -45,10 +46,30 @@ class Register(Resource):
                                 INSERT INTO {table} (username, id) Values (?, 0);
                                 '''.format(table=Register.TABLE_NAME)
 
+        
         cursor.execute(insert_username_table, (username_string,))
         connect.commit()
-        connect.close()
         
+        create_total_game_table_for_user = '''
+                                    CREATE TABLE IF NOT EXISTS {user}_game_total_table
+                                    (username TEXT NOT NULL, 
+                                    game_run INT PRIMARY KEY NOT NULL,
+                                    game_total_time REAL);
+                                    '''.format(user=username_string)
+                                    
+        
+        create_single_game_table_for_user = '''
+                                    CREATE TABLE IF NOT EXISTS {user}_game_times_table
+                                    (username TEXT NOT NULL, 
+                                    game_type INTEGER NOT NULL, 
+                                    game_time REAL);
+                                    '''.format(user=username_string)
+                                    
+        db = db_c('data')
+        db.create(create_total_game_table_for_user)
+        db.create(create_single_game_table_for_user)
+        
+        connect.close()
         return {"message": "Username Acceped"}
 
       

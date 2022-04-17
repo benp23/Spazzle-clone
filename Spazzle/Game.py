@@ -59,14 +59,13 @@ class total_games(Resource):
         return {"message": "No Game Found"}
         
     def post(self):
-    """ Sends game run data to database for storage and further processing
+        """Sends game run data to database for storage and further processing
             Parameters
             ----------
             
             username: str, required
             game_run: int, required
-            total_game_time: float, required
-            """
+            total_game_time: float, required"""
         data = total_games.parser.parse_args()
         
         if not User.find_user(data['username']):
