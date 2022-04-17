@@ -30,8 +30,10 @@ def stats():
     return render_template('stats.html')
 
 api.add_resource(User, '/users')
-api.add_resource(Register, '/users/register') #current functionality is also done by user
-api.add_resource(total_games, '/game/total')
+api.add_resource(Register, '/users/register') #"username":<string>
+api.add_resource(total_games, '/game/total') 
+    #post info :: "username":<string>, "game_run":<int>, "total_game_time":float
+    #get into :: "username":<string>, "game_run":<int>
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
