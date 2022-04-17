@@ -22,14 +22,15 @@ class db_c:
             
             create_user_table = '''
                                 CREATE TABLE IF NOT EXISTS user_table
-                                (ID INTEGER PRIMARY KEY, username TEXT NOT NULL);
+                                (username TEXT NOT NULL PRIMARY KEY,
+                                ID INTEGER);
                                 '''
             cursor.execute(create_user_table)
             connection.commit()
             #ADD feature to make it so each user has own
             create_game_times_table = '''
                                     CREATE TABLE IF NOT EXISTS game_times_table
-                                    (username TEXT PRIMARY KEY NOT NULL, 
+                                    (username TEXT NOT NULL, 
                                     game_type INTEGER NOT NULL, 
                                     game_time REAL);
                                     '''
@@ -37,8 +38,8 @@ class db_c:
             connection.commit()
             create_game_total_table = '''
                                     CREATE TABLE IF NOT EXISTS game_total_table
-                                    (username TEXT PRIMARY KEY NOT NULL, 
-                                    game_run INT,
+                                    (username TEXT NOT NULL, 
+                                    game_run INT PRIMARY KEY NOT NULL,
                                     game_total_time REAL);
                                     '''
             cursor.execute(create_game_total_table)
