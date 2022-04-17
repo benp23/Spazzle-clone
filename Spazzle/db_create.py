@@ -2,18 +2,50 @@ import sqlite3
 from sqlite3 import Error
 
 class db_c:
-    
-    def create(self, name):
-        
+    dbname=''
+    def __init__(self, name):
+        global dbname 
         dbname = name +'.db'
         try:
             connection = sqlite3.connect(dbname)
-            cursor = connection.cursor()
-            create_table = '''CREATE TABLE IF NOT EXISTS users(
-                            username TEXT NOT NULL PRIMARY KEY,);'''
-            cursor.execute(create_table)
-            connection.commit()
-            connection.close()
+            if connection:
+                connection.close()
+                return
         except Error:
             return Error
+            
+    def create(self):
+        try:
+            global dbname
+            connection = sqlite3.connect(dbname)
+            cursor = connection.cursor()
+            
+            create_user_table = '''
+                                CREATE TABLE IF NOT EXISTS user_table
+                                (ID INTEGER PRIMARY KEY, username TEXT NOT NULL);
+                                '''
+            cursor.execute(create_user_table)
+            connection.commit()
+            #ADD feature to make it so each user has own
+            create_game_times_table = '''
+                                    CREATE TABLE IF NOT EXISTS game_times_table
+                                    (username TEXT PRIMARY KEY NOT NULL, 
+                                    game_type INTEGER NOT NULL, 
+                                    game_time REAL);
+                                    '''
+            cursor.execute(create_game_times_table)
+            connection.commit()
+            create_game_total_table = '''
+                                    CREATE TABLE IF NOT EXISTS game_total_table
+                                    (username TEXT PRIMARY KEY NOT NULL, 
+                                    game_run INT,
+                                    game_total_time REAL);
+                                    '''
+            cursor.execute(create_game_total_table)
+            connection.commit()
+            connection.close()
         
+        except Error:
+            return Error
+       
+      
