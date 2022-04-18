@@ -11,7 +11,7 @@ from flask_restful import Resource, Api
 from db_create import db_c
 from User import User
 from Register import Register
-from Game import total_games
+from Game import total_games, single_games
 
 
 app = Flask(__name__)
@@ -50,6 +50,9 @@ api.add_resource(Register, '/users/register') #"username":<string>
 api.add_resource(total_games, '/game/total') 
     #post info :: "username":<string>, "game_run":<int>, "total_game_time":float
     #get into :: "username":<string>, "game_run":<int>
+api.add_resource(single_games, '/game/time')
+    #Post info: "username":<string>, "game_run":<int>, "game_type":<int>, "game_time":<float>
+    #Get info: "username":<string>, "game_run":<int>, "game_type":<int>
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
