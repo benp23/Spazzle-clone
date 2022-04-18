@@ -10,7 +10,7 @@ from flask_restful import Resource, reqparse
 
 class total_games(Resource):
     """Class for accessing database information related to total game information"""
-    TABLE_NAME = 'game_total_table'
+    TABLE_NAME = '_game_total_table'
         
     #Set up parser for json input. Set input variable accepted
     parser = reqparse.RequestParser()
@@ -29,6 +29,20 @@ class total_games(Resource):
                         help = "No time added"
                         )
 
+    @classmethod
+    def find_game(cls, table_name, game_run):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        
+        query = "SELECT * FROM {table} WHERE game_run =?".format(table = table_name) 
+        #This is going to grab all rows; can specific w/ this lster
+        
+        rows = cursor.execute(query, (game_run,))
+        
+        row = rows.fetchone()
+        
+        return row
+        
     def get(self):
         """ Returns total time of run as JSON
             Parameters
@@ -41,27 +55,16 @@ class total_games(Resource):
         
         if not User.find_user(data['username']):
             return {"message": "No user was found."}
-        
-        table_name = data['username']+"_"+ self.TABLE_NAME
-        
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        
-        query = "SELECT * FROM {table} WHERE game_run =?".format(table = table_name) 
-        #This is going to grab all rows; can specific w/ this lster
-        
-        rows = cursor.execute(query, (data['game_run'],))
-        
-        row = rows.fetchone()
-        
-        return {"username": row[0], "game_run":row[1], "total_game_time":row[2]}
-        
        
-        connection.close()
+       
+        table_name = data['username']+self.TABLE_NAME
+        
+        row = self.find_game(table_name, data['game_run'])
+        if row:
+            return {"username": row[0], "game_run":row[1], "total_game_time":row[2]} 
+       
         return {"message": "No Game Found"}
        
-    def find_game(cls, table_name, game_run):
-        return 
         
     def post(self):
         """Sends game run data to database for storage and further processing
@@ -77,14 +80,15 @@ class total_games(Resource):
         if not User.find_user(data['username']):
             return {"message": "No user was found."}
         
-        table_name = data['username']+"_"+self.TABLE_NAME
+        table_name = data['username']+self.TABLE_NAME
+        
+        row = self.find_game(table_name, data['game_run'])
+        
+        if row:
+            return {"message": "That game is already entered. Use Put if changes are needed"}
         
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        
-        query = "SELECT * FROM {table} WHERE game_run=?".format(table = table_name)
-        
-
         query = "INSERT INTO {table} VALUES (?,?, ?)".format(table=table_name)
         cursor.execute(query, (data['username'], data['game_run'], data['total_game_time']))
 
@@ -96,12 +100,17 @@ class total_games(Resource):
         
         
 class single_games(Resource):
-    TABLE_NAME = 'game_total_table'
+    TABLE_NAME = '_game_times_table'
 	
     parser = reqparse.RequestParser()
     parser.add_argument('username',
                         required = True,
                         help = "Error: Generic"
+                        )
+    parser.add_argument('game_run',
+                        type = int,
+                        required = False,
+                        help = "Not accepted format for Game run"
                         )
     parser.add_argument('game_type',
                         type = int,
@@ -116,4 +125,40 @@ class single_games(Resource):
                         
         
     def post(self):
+        data = single_games.parser.parse_args()
+        
+        if not User.find_user(data['username']):
+            return {"message": "No user was found."}
+        
+        table_name = data['username']+self.TABLE_NAME
+        
+        #row = self.find_game(table_name, data['game_run'])
+   
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+
+        query = "INSERT INTO {table} VALUES (?,?,?)".format(table=table_name)
+        cursor.execute(query, (data['game_run'], data['game_type'], data['game_time']))
+        connection.commit()
+        connection.close()
+        
+        return {"message": "Game Run added"}
+        
+        
+    def get(self):
         return
+    
+    @classmethod
+    def find_game(cls, table_name, game_run):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        
+        query = "SELECT * FROM {table} WHERE game_run =?".format(table = table_name) 
+        #This is going to grab all rows; can specific w/ this lster
+        
+        rows = cursor.execute(query, (game_run,))
+        
+        row = rows.fetchone()
+        
+        return row
+        
