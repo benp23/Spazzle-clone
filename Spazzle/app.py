@@ -1,17 +1,27 @@
+"""
+    File: app
+    Authors: Spencer Wheeler, Benjamin Paul, Troy Scites
+    Description: Starting point for the flask set up and functionality
+                Some parts of this will be partially migrated to other files later
+                
+"""
+
 from flask import Flask, render_template, url_for
 from flask_restful import Resource, Api
 from db_create import db_c
-#from data_spazzle import RegisterUser, User
-from UsersTest import User
+from User import User
+from Register import Register
+from Game import total_games, single_games
+
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api=Api(app)
-#This is just to create a new db so we can delete other databases while ensuring the data
-#is going through/coming out correctly w/o old objects getting in the way
-db = db_c().create("databank") 
 
+#create database for use
+db = db_c('data')
 
+#set hmtl routes
 @app.route('/')
 @app.route('/home')
 @app.route('/menu')
@@ -26,8 +36,23 @@ def game():
 def stats():
     return render_template('stats.html')
 
+@app.route('/gametest')
+def gametest():
+    return render_template('color_memory.html')
+    
+@app.route('/gametest2')
+def gametest2():
+    return render_template('addition.html')
+    
+#set api functionality routes
 api.add_resource(User, '/users')
-#api.add_resource(UserRegister, '/users/register') #current functionality is also done by user
+api.add_resource(Register, '/users/register') #"username":<string>
+api.add_resource(total_games, '/game/total') 
+    #post info :: "username":<string>, "game_run":<int>, "total_game_time":float
+    #get into :: "username":<string>, "game_run":<int>
+api.add_resource(single_games, '/game/time')
+    #Post info: "username":<string>, "game_run":<int>, "game_type":<int>, "game_time":<float>
+    #Get info: "username":<string>, "game_run":<int>, "game_type":<int>
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
