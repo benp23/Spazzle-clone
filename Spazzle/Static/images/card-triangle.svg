@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<svg width="108" height="147" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <g class="layer">
+  <title>Layer 1</title>
+  <g id="svg_3" transform="matrix(1 0 0 1 0 0) matrix(1 0 0 1 0 0)">
+   <rect fill="#ffffff" height="147" id="svg_1" rx="22" ry="22" stroke="#000000" width="108" x="0.27" y="0"/>
+   <path d="m17.28,106.24l37.12,-66.03l37.12,66.03z" fill="#ff0000" id="svg_4" stroke="#000000"/>
+  </g>
+ </g>
+</svg>

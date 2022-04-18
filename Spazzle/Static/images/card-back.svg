@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<svg width="108" height="147" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <defs>
+  <symbol id="svg_26" version="1" viewBox="0 0 140 190" x="0" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0">
+   <defs id="svg_15">
+    <linearGradient id="svg_21">
+     <stop id="svg_25" offset="0" stop-color="#830007"/>
+     <stop id="svg_24" offset="1" stop-color="#f00"/>
+    </linearGradient>
+    <linearGradient gradientTransform="translate(0 -1)" gradientUnits="userSpaceOnUse" id="svg_11" x1="2" x2="109" y1="63.1" y2="128.7">
+     <stop id="svg_23" offset="0" stop-color="#ebf0d0"/>
+     <stop id="svg_22" offset="1" stop-color="#ffffeb"/>
+    </linearGradient>
+    <linearGradient gradientTransform="scale(.85424 1.1706)" gradientUnits="userSpaceOnUse" id="svg_8" x1="138.23" x2="36.52" xlink:href="#svg_21" y1="146.62" y2="18.73"/>
+    <linearGradient gradientTransform="scale(.85537 1.1691)" gradientUnits="userSpaceOnUse" id="svg_4" x1="22.03" x2="146.4" xlink:href="#svg_21" y1="17.15" y2="140.45"/>
+    <pattern height="13.75" id="svg_6" patternTransform="translate(15 -5)" patternUnits="userSpaceOnUse" width="14.14">
+     <g fill="#fff" id="svg_16" transform="translate(31.25 -2.9289)">
+      <rect height="5" id="svg_20" transform="rotate(45)" width="5" x="-17.53" y="21.67"/>
+      <rect height="5" id="svg_19" transform="rotate(45)" width="5" x="-12.8" y="26.39"/>
+      <rect height="5" id="svg_18" transform="rotate(45)" width="5" x="-12.53" y="16.67"/>
+      <rect height="5" id="svg_17" transform="rotate(45)" width="5" x="-7.8" y="21.39"/>
+     </g>
+    </pattern>
+   </defs>
+   <g id="svg_9">
+    <path d="m21,5l103,0c8.86,0 16,7.14 16,16l0,153c0,8.86 -7.14,16 -16,16l-103,0c-8.86,0 -16,-7.14 -16,-16l0,-153c0,-8.86 7.14,-16 16,-16z" fill-opacity="0.5" id="svg_14"/>
+    <path d="m17,1l103,0c8.86,0 16,7.14 16,16l0,153c0,8.86 -7.14,16 -16,16l-103,0c-8.86,0 -16,-7.14 -16,-16l0,-153c0,-8.86 7.14,-16 16,-16z" fill="#fff" id="svg_13"/>
+    <path d="m19,3l103,0c8.86,0 16,7.14 16,16l0,153c0,8.86 -7.14,16 -16,16l-103,0c-8.86,0 -16,-7.14 -16,-16l0,-153c0,-8.86 7.14,-16 16,-16z" fill="#c7891f" id="svg_12"/>
+    <path d="m18,2l103,0c8.86,0 16,7.14 16,16l0,153c0,8.86 -7.14,16 -16,16l-103,0c-8.86,0 -16,-7.14 -16,-16l0,-153c0,-8.86 7.14,-16 16,-16z" fill="url(#svg_11)" id="svg_10"/>
+   </g>
+   <path d="m22.17,10l94.41,0c8.13,0 14.67,6.54 14.67,14.67l0,140.25c0,8.12 -6.54,14.66 -14.67,14.66l-94.41,0c-8.13,0 -14.67,-6.54 -14.67,-14.66l0,-140.25c0,-8.13 6.54,-14.67 14.67,-14.67z" fill="url(#svg_8)" id="svg_7"/>
+   <path d="m22.17,10l94.41,0c8.13,0 14.67,6.54 14.67,14.67l0,140.25c0,8.12 -6.54,14.66 -14.67,14.66l-94.41,0c-8.13,0 -14.67,-6.54 -14.67,-14.66l0,-140.25c0,-8.13 6.54,-14.67 14.67,-14.67z" fill="url(#svg_6)" id="svg_5"/>
+   <path d="m22.16,9.38c-8.47,0 -15.29,6.82 -15.29,15.28l0,140.25c0,8.46 6.82,15.31 15.29,15.31l94.43,0c8.46,0 15.29,-6.85 15.29,-15.31l0,-140.25c0,-8.47 -6.83,-15.29 -15.29,-15.29l-94.43,0l0,0.01zm0,1.25l94.43,0c7.79,0 14.03,6.24 14.03,14.03l0,140.25c0,7.79 -6.24,14.06 -14.03,14.06l-94.43,0c-7.79,0 -14.03,-6.27 -14.03,-14.06l0,-140.25c0,-7.8 6.24,-14.04 14.03,-14.04l0,0.01z" fill="url(#svg_4)" id="svg_3"/>
+   <metadata>image/svg+xmlOpenclipartCard backs: grid red2009-03-23T13:59:53playing card backs for the &quot;Ornamental&quot;, &quot;White&quot;, &quot;Simple&quot; and &quot;Bordered&quot; setshttp://openclipart.org/detail/23038/card-backs:-grid-red-by-nicubunu-23038nicubunubordered deckcardcardsclip artclipartdeckgamblinggameimagemediaornamental deckplayplaying cardspngpublic domainsimple decksvgwhite deck</metadata>
+  </symbol>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <rect fill="#ffffff" height="147" id="svg_1" rx="22" ry="22" stroke="#000000" width="108" x="0" y="0"/>
+  <use id="svg_27" transform="matrix(1.02694 0 0 1.02291 -1.19091 -1.3431)" x="0" xlink:href="#svg_26" y="0"/>
+ </g>
+</svg>

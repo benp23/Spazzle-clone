@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<svg width="108" height="147" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <g class="layer">
+  <title>Layer 1</title>
+  <rect fill="#ffffff" height="148" id="svg_1" rx="22" ry="22" stroke="#000000" transform="matrix(1 0 0 1 0 0)" width="107" x="0" y="0"/>
+  <path d="m53.75,59.64c14.22,-37.85 69.96,0 0,48.66c-69.96,-48.66 -14.22,-86.51 0,-48.66z" fill="#ff0000" id="svg_2" stroke="#000000"/>
+ </g>
+</svg>
