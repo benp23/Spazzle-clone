@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
  */
+/*
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
+*/
 const width = 75;
 const height = 75;
 let allowUserInput = false;
-let level = 4;
+// let level = 4;
 let order = [];
 let userOrder = [];
 let matched = true;
@@ -17,10 +19,14 @@ let wedges = [];
 
 
 // Build wedges
-wedges[0] = new wedge(173, 73, "blue", "#00ccff", "blue", 0);
-wedges[1] = new wedge(252, 73, "green", "#66ff33", "green", 1);
-wedges[2] = new wedge(173, 152, "red", "#ff00ff", "red", 2);
-wedges[3] = new wedge(252, 152, "yellow", "#ff9900", "yellow", 3);
+function buildWedges() {
+    // Clear wedges array
+    wedges = [];
+    wedges[0] = new wedge(173, 73, "blue", "#00ccff", "blue", 0);
+    wedges[1] = new wedge(252, 73, "green", "#66ff33", "green", 1);
+    wedges[2] = new wedge(173, 152, "red", "#ff00ff", "red", 2);
+    wedges[3] = new wedge(252, 152, "yellow", "#ff9900", "yellow", 3);
+};
 
 // Find the wedge where the user clicks
 function get_select(x, y) {
@@ -36,7 +42,7 @@ function get_select(x, y) {
 }
 
 // The sleep function pauses so the user can see the highlighted color wedge
-function sleep(x) {
+function sleep(level, x) {
     let timeout = 600;  // Shortest time when showing user the pattern
     if (x === "short") {
         timeout = 400;  // Delay while redrawing in case same color is chosen
@@ -72,26 +78,33 @@ function wedge(x, y, c, sc, n, v) {
     };
 }
 
-// Get mouse position
-$("canvas").mousemove((event) => {
-    var rect = canvas.getBoundingClientRect();
-    mousePosition.x = event.pageX - rect.left;
-    mousePosition.y = event.pageY - rect.top;
-});
+function turnOnColorHandlers() {
+    // Get mouse position
+    gameCanvasID.on('mousemove', function(event) {
+        var rect = gameCanvas.getBoundingClientRect();
+        mousePosition.x = event.pageX - rect.left;
+        mousePosition.y = event.pageY - rect.top;
+    });
 
-// Update user selection when boxes are clicked
-$("canvas").click(function() {
-    if (allowUserInput) {    
-        let found = get_select(mousePosition.x, mousePosition.y);
-        if (found) {
-            userOrder.push(found.value);
+    // Update user selection when boxes are clicked
+    gameCanvasID.on("click", function() {
+        if (allowUserInput) {
+            let found = get_select(mousePosition.x, mousePosition.y);
+            if (found) {
+                userOrder.push(found.value);
+            }
         }
-    }
-});
+    });
+};
+
+function turnOffColorHandlers() {
+    gameCanvasID.off('mousemove');
+    gameCanvasID.off('click');
+}
 
 // Clear the canvas of any drawn objects
 function Clear() {
-    context.clearRect(0, 0, $("canvas")[0].width, $("canvas")[0].height);
+    context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 }
 
 // Draw all objects on the canvas
@@ -102,28 +115,31 @@ function Draw() {
 }
 
 // Loop over the sequence of highlighting the colors for the user to repeat
-async function PlayGame() {
+async function PlayGame(level) {
     console.log("Playing game");
+    // Empty the arrays before starting
+    order = [];
+    userOrder = [];
     while (matched === true && order.length < level) {
         for (let i = 0; i < level; i++) {
             Clear();
             let current = Math.floor(Math.random() * 4);
             order.push(current);
             console.log("Randomly selected wedge " + current);
-            wedge = wedges[current];
-            wedge.selected = true;
+            currentWedge = wedges[current];
+            currentWedge.selected = true;
             Draw();
-            await sleep();
+            await sleep(level);
             Clear();
-            wedge.selected = false;
+            currentWedge.selected = false;
             Draw();
-            await sleep("short");
+            await sleep(level, "short");
         }
     }
     allowUserInput = true;
     while (userOrder.length < order.length) {
         console.log("Polling for user input");
-        await sleep("poll");
+        await sleep(level, "poll");
     }
     allowUserInput = false;
     // Compare the random order to the user input
@@ -143,6 +159,9 @@ async function PlayGame() {
         context.lineTo(327, 73);
         context.stroke();
         context.closePath();
+        // Turn off any event handlers to prevent them from interfering in other games
+        turnOffColorHandlers();
+        return winGame = true;
     } else {
         // Draw an 'X' for failure
         context.strokeStyle = "black";
@@ -160,9 +179,26 @@ async function PlayGame() {
     }
 }
 
+// Called from main.js
+function startColorGame(level) {
+    // Starts at level 1 in main.js but change it to 4 to make this game start with a pattern of 4
+    let newLevel = level + 3;
+    gameHeading.text('Remember This Pattern!');
+    gameCanvasID.show();
+    // Calling this global function from main.js
+    resizeCanvas();
+    // Functions to start the game
+    turnOnColorHandlers();
+    buildWedges();
+    Draw();
+    PlayGame(newLevel);
+}
+
 // Run
+/*
 $(document).ready(() => {
     Clear();
-    Draw();
+    startColorGame();
     PlayGame();
 });
+*/

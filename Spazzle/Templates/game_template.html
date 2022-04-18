@@ -12,15 +12,16 @@
                     <tr id="heading_row">
                         <th id="button_cell"><button id="quit_button">Quit Game</button></th>
                         <th id="game_heading">Game Title/Description!</th>
-                        <th id="game_timer">0:00</th>
+                        <th id="timer_heading">
+                            <span id="level_number">Level #</span>
+                            <span> - </span>
+                            <span id="game_timer">0:00</span></th>
                     </tr>
                 </tbody>
             </table>
-            <canvas id="game_canvas"></canvas>
-            <!--
-            <div id="game_div"></div>
-            -->
-            <span id="answer_inline">
+            <canvas id="game_canvas" style="display: none;"></canvas>
+            <div id="game_div" style="display: none;"></div>
+            <span id="answer_inline" style="display: none;">
                 <form id="answer_form">
                     <label for="answer_input" id="answer_label">Answer:</label>
                     <input type="text" id="answer_input"></input>
@@ -28,6 +29,6 @@
                 </form>
             </span>
         </div>
-        <script src=""></script>
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
     </body>
 </html>

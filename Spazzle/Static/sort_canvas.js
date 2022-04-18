@@ -5,27 +5,35 @@
  * https://stackoverflow.com/questions/51792020/selecting-and-deselecting-drawn-objects-on-canvas-and-moving-to-mouse-x-and-y
  *
  */
+/*
 let context = $("canvas")[0].getContext("2d");
 let canvas = document.getElementById("canvas");
 let level = 4;
+*/
 
-const goals = [];
-const tokens = [];
+let goals = [];
+let tokens = [];
+
 // Build the goals and tokens
-goals[0] = new token(0, 100, 50, 100, 'green', false, false);
-goals[1] = new token(450, 100, 50, 100, 'blue', false, false);
-for (let i = 0; i < level; i++) {
-	tokens[i] = randomSquare('green');
-}
-for (let i = level; i < (level + level); i++) {
-	tokens[i] = randomSquare('blue');
+function buildGoalsAndTokens(level) {
+    // Empty the arrays
+    goals = [];
+    tokens = [];
+    goals[0] = new token(0, 100, 50, 100, 'green', false, false);
+    goals[1] = new token(450, 100, 50, 100, 'blue', false, false);
+    for (let i = 0; i < level; i++) {
+    	tokens[i] = randomSquare('green');
+    }
+    for (let i = level; i < (level + level); i++) {
+    	tokens[i] = randomSquare('blue');
+    }
 }
 
-let mousePosition = {
+let sortMousePosition = {
     x: 0,
     y: 0
 };
-let selected;
+let sortSelected;
 
 // Randomly choose location of token
 function randomSquare(color) {
@@ -57,7 +65,10 @@ function checkAllTokensAreInGoals() {
     });
     if ((greenTokensCleared + blueTokensCleared) === tokens.length) {
         console.log("All cleared!");
-        Clear();
+        clearSort();
+        // Turn off any event handlers to prevent them from interfering in other games
+        turnOffSortHandlers();
+        return winGame = true;
     }
 }
 
@@ -88,7 +99,7 @@ function token(x, y, h, w, c, f, m) {
 }
 
 // Select the token on the canvas
-function get_select(x, y) {
+function sort_get_select(x, y) {
     let found;
 
     $.each(tokens, (i, token) => {
@@ -100,39 +111,46 @@ function get_select(x, y) {
     return (found);
 }
 
-// Select and move token
-$("canvas").click(function() {
-    let found = get_select(mousePosition.x, mousePosition.y);
+function turnOnSortHandlers() {
+    // Select and move token
+    gameCanvasID.on('click', function() {
+        let found = sort_get_select(sortMousePosition.x, sortMousePosition.y);
 
-    Clear();
-    // Toggle Selection
-    if (found && !selected) {
-        found.selected = true;
-        selected = found;
-    } else if (found === selected) {
-        found.selected = false;
-        selected = null;
-    }
+        clearSort();
+        // Toggle Selection
+        if (found && !sortSelected) {
+            found.selected = true;
+            sortSelected = found;
+        } else if (found === sortSelected) {
+            found.selected = false;
+            sortSelected = null;
+        }
 
-    // Move token
-    if (!found && selected) {
-        selected.move(mousePosition.x, mousePosition.y);
-        //TODO Figure out how to unselect when token is moved
-        selected.selected = false;
-        selected = null;
-    }
-    Draw();
-});
+        // Move token
+        if (!found && sortSelected) {
+            sortSelected.move(sortMousePosition.x, sortMousePosition.y);
+            //TODO Figure out how to unselect when token is moved
+            sortSelected.selected = false;
+            sortSelected = null;
+        }
+        drawSort();
+    });
 
-// Get mouse position
-$("canvas").mousemove((event) => {
-    var rect = canvas.getBoundingClientRect();
-    mousePosition.x = event.pageX - rect.left;
-    mousePosition.y = event.pageY - rect.top;
-});
+    // Get mouse position
+    gameCanvasID.on('mousemove', function(event) {
+        var rect = gameCanvas.getBoundingClientRect();
+        sortMousePosition.x = event.pageX - rect.left;
+        sortMousePosition.y = event.pageY - rect.top;
+    });
+}
+
+function turnOffSortHandlers() {
+    gameCanvasID.off('click');
+    gameCanvasID.off('mousemove');
+}
 
 // Draw the tokens
-function Draw() {
+function drawSort() {
     $.each(tokens, (i, token) => {
         token.draw(context);
     });
@@ -142,12 +160,25 @@ function Draw() {
     checkAllTokensAreInGoals();
 }
 
-function Clear() {
-    context.clearRect(0, 0, $("canvas")[0].width, $("canvas")[0].height);
+function clearSort() {
+    context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+}
+
+function startSortingGame(level) {
+    gameHeading.text('Sort the Colors Into the Goals!');
+    gameCanvasID.show();
+    // Calling this global function from main.js
+    resizeCanvas();
+    // Functions to start the game
+    turnOnSortHandlers();
+    buildGoalsAndTokens(level);
+    drawSort();
 }
 
 // Run
+/*
 $(document).ready(() => {
-    Draw();
+    drawSort();
 });
+*/
 

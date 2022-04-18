@@ -1,6 +1,15 @@
+body {
+    margin: 0;
+}
+
+#game_container {
+    height: 100vh;
+    width: 100vw;
+}
+
 #heading_table {
     width: 100%;
-    margin-top: 50px;
+    padding-top: 50px;
 }
 
 #heading_row {
@@ -19,7 +28,7 @@
     width: 50%;
 }
 
-#game_timer {
+#timer_heading {
     width: 25%;
 }
 
@@ -28,6 +37,11 @@
     height: calc(100vh - 200px);
     margin: 5px auto 5px auto;
     display: block;
+}
+
+#game_div {
+    width: 100%;
+    height: 75%;
 }
 
 #answer_inline {
