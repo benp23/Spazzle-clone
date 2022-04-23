@@ -54,6 +54,7 @@ class Register(Resource):
                                     CREATE TABLE IF NOT EXISTS {user}_game_total_table
                                     (username TEXT NOT NULL, 
                                     game_run INT PRIMARY KEY NOT NULL,
+                                    game_mode TEXT NOT NULL,
                                     game_total_time REAL);
                                     '''.format(user=username_string)
                                     
@@ -61,7 +62,7 @@ class Register(Resource):
         create_single_game_table_for_user = '''
                                     CREATE TABLE IF NOT EXISTS {user}_game_times_table
                                     (game_run INT NOT NULL, 
-                                    game_type INT NOT NULL, 
+                                    game_type TEXT NOT NULL, 
                                     game_time REAL);
                                     '''.format(user=username_string)
                                     
@@ -70,6 +71,6 @@ class Register(Resource):
         db.create(create_single_game_table_for_user)
         
         connect.close()
-        return {"message": "Username Acceped"}
+        return {"message": "{name} Acceped".format(name = data['username'])}
 
       
