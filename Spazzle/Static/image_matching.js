@@ -75,7 +75,7 @@
         }
         let cardIndex = -1;
         let cardsHTML = '<table style="display: flex;width: 100%;height: 100%;justify-content: center;align-items: center;">'
-            + '<tbody style="display: grid;align-items: center;height: 100%;">';
+            + '<tbody style="display: grid;align-items: center;align-content: center;height: 100%;">';
         /*
         // Dynamically fit columns with a row height
         rowHeight = Math.floor(100 / numberOfRows);
@@ -102,24 +102,6 @@
         gameDiv.append(cardsHTML);
     }
 
-    // buildCards();
-
-    function turnOverCards(firstCard, firstCardID, secondCard, secondCardID) {
-        setTimeout(function() {
-            firstCard.clicked = false;
-            $("#" + firstCardID).attr('src', cardBackSrc);
-            secondCard.clicked = false;
-            $("#" + secondCardID).attr('src', cardBackSrc);
-        }, 1000);
-    }
-/*
-    function youWin() {
-        setTimeout(function() {
-                level++;
-                buildCards();
-        }, 2000);
-    }
-*/
     let timesClicked = 0;
     let firstCard;
     let firstCardID;
@@ -127,24 +109,29 @@
     let secondCardID;
     $(document.body).on("click", '.card_image', function() {
         let thisCard = $(this);
+        let thisCardID = thisCard.attr('id');
         let cardIndex = parseInt(thisCard.attr('card_index'));
         let cardMatch = cardArray[cardIndex];
         if (cardMatch.clicked) {
             return;
         } else {
             timesClicked += 1;
-            cardMatch.clicked = true;
         }
-        if (timesClicked === 1) {
-            firstCard = cardMatch;
-            firstCardID = thisCard.attr('id');
+        if (timesClicked > 2) {
+            if (!firstCard.solved) {
+                firstCard.clicked = false;
+                $("#" + firstCardID).attr('src', cardBackSrc);
+            }
+            firstCard = secondCard;
+            firstCardID = secondCardID;
         }
-        thisCard.attr('src', cardMatch.shape);
-        if (timesClicked === 2) {
-            timesClicked = 0;
+        if (timesClicked > 1) {
             secondCard = cardMatch;
-            secondCardID = thisCard.attr('id');
+            secondCard.clicked = true;
+            thisCard.attr('src', cardMatch.shape);
+            secondCardID = thisCardID;
             if (firstCard.shape === secondCard.shape) {
+                timesClicked = 0;
                 firstCard.solved = true;
                 secondCard.solved = true;
                 for (let i = 0; i < cardArray.length; i++) {
@@ -155,9 +142,11 @@
                         return winGame = true;
                     }
                 }
-            } else {
-                turnOverCards(firstCard, firstCardID, secondCard, secondCardID);
             }
+        } else {
+            firstCard = cardMatch;
+            firstCard.clicked = true;
+            thisCard.attr('src', cardMatch.shape);
+            firstCardID = thisCardID;
         }
     });
-
