@@ -23,6 +23,10 @@ class total_games(Resource):
                         required = False,
                         help = "No games Found"
                         )
+    parser.add_argument('game_mode',
+                        required = True,
+                        help = "no game mode"
+                        )
     parser.add_argument('total_game_time',
                         type = float,
                         required = False,
@@ -61,7 +65,7 @@ class total_games(Resource):
         
         row = self.find_game(table_name, data['game_run'])
         if row:
-            return {"username": row[0], "game_run":row[1], "total_game_time":row[2]} 
+            return {"username": row[0], "game_run":row[1], "game_mode":row[2], "total_game_time":row[3]} 
        
         return {"message": "No Game Found"}
        
@@ -109,17 +113,16 @@ class single_games(Resource):
                         )
     parser.add_argument('game_run',
                         type = int,
-                        required = False,
+                        required = True,
                         help = "Not accepted format for Game run"
                         )
     parser.add_argument('game_type',
-                        type = int,
-                        required = False,
+                        required = True,
                         help = "No games Found"
                         )
     parser.add_argument('game_time',
                         type = float,
-                        required = False,
+                        required = True,
                         help = "No time added"
                         )
                         
@@ -146,7 +149,7 @@ class single_games(Resource):
         
         
     def get(self):
-        return
+        return {"message": "No functionality"}
     
     @classmethod
     def find_game(cls, table_name, game_run):

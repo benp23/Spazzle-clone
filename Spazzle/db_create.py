@@ -28,6 +28,13 @@ class db_c:
                                 ID INTEGER);
                                 '''
                 self.create(create_user_table)
+                create_leader_board = '''
+                                    CREATE TABLE IF NOT EXISTS leaderboard
+                                    (position INT NOT NULL PRIMARY KEY,
+                                    username TEXT,
+                                    time REAL);
+                                    '''
+                self.create(create_leader_board)
                 connection.close() #closes connection to database
                 return
         except Error:
