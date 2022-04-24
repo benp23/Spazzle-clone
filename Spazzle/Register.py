@@ -40,7 +40,7 @@ class Register(Resource):
         #return {"Message":username_string}
         
         if User.find_user(username_string):
-            return {"message": "Username is alreadly in use. Please choose another"}
+            return {"message": "{us} is alreadly in use. Please choose another".format(us = username_string)}
         
         insert_username_table = '''
                                 INSERT INTO {table} (username, id) Values (?, 0);
@@ -52,8 +52,7 @@ class Register(Resource):
         
         create_total_game_table_for_user = '''
                                     CREATE TABLE IF NOT EXISTS {user}_game_total_table
-                                    (username TEXT NOT NULL, 
-                                    game_run INT PRIMARY KEY NOT NULL,
+                                    (game_run INT PRIMARY KEY NOT NULL,
                                     game_mode TEXT NOT NULL,
                                     game_total_time REAL);
                                     '''.format(user=username_string)

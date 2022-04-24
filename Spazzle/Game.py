@@ -24,7 +24,7 @@ class total_games(Resource):
                         help = "No games Found"
                         )
     parser.add_argument('game_mode',
-                        required = True,
+                        required = False,
                         help = "no game mode"
                         )
     parser.add_argument('total_game_time',
@@ -58,14 +58,14 @@ class total_games(Resource):
         data = total_games.parser.parse_args()
         
         if not User.find_user(data['username']):
-            return {"message": "No user was found."}
+            return {"message": "{name} was not found.".format(name = data['username'])}
        
        
         table_name = data['username']+self.TABLE_NAME
         
         row = self.find_game(table_name, data['game_run'])
         if row:
-            return {"username": row[0], "game_run":row[1], "game_mode":row[2], "total_game_time":row[3]} 
+            return {"game_run":row[0], "game_mode":row[1], "total_game_time":row[2]} 
        
         return {"message": "No Game Found"}
        
@@ -89,17 +89,17 @@ class total_games(Resource):
         row = self.find_game(table_name, data['game_run'])
         
         if row:
-            return {"message": "That game is already entered. Use Put if changes are needed"}
-        
+            #return {"message": "That game is already entered. Use Put if changes are needed"}
+            return {"message": "Game Run is already entered", "game_run": data['game_run'], "game_mode": data['game_mode'], "total_game_time": data['total_game_time']}
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        query = "INSERT INTO {table} VALUES (?,?, ?)".format(table=table_name)
-        cursor.execute(query, (data['username'], data['game_run'], data['total_game_time']))
+        query = "INSERT INTO {table} VALUES (?, ?, ?)".format(table=table_name)
+        cursor.execute(query, (data['game_run'], data['game_mode'], data['total_game_time']))
 
         connection.commit()
         connection.close()
         
-        return {"message": "Game Run added"}
+        return {"message": "Game Run added", "game_run": data['game_run'], "game_mode": data['game_mode'], "total_game_time": data['total_game_time']}
         
         
         
@@ -145,7 +145,7 @@ class single_games(Resource):
         connection.commit()
         connection.close()
         
-        return {"message": "Game Run added"}
+        return {"message": "Game Run added", "game_run":data['game_run'], "game_type": data['game_type'], "game_time": data['game_time']}
         
         
     def get(self):
