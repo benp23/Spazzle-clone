@@ -176,6 +176,9 @@ async function PlayGame(level) {
         context.lineTo(327, 73);
         context.stroke();
         context.closePath();
+        if (mode !== 'infinite') {
+            gameOver(mode);
+        }
     }
 }
 

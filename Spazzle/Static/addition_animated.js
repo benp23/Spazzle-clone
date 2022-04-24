@@ -11,11 +11,6 @@
  * different browsers.)
  */
 
-// canvas element, canvas html, 2d context
-// let canvasID = $("#game_canvas");
-// let canvas = canvasID.get(0);
-// let context = canvas.getContext("2d");
-
 // Game starts at level 2 (2 numbers), set font size for numbers
 // let level = 2;
 let fontSize = 50;
@@ -134,19 +129,15 @@ function checkAnswer(guess) {
         sum += numbers[i].number;
     }
     if (guess === sum) {
-        // $("#answer_text").text("Correct!").css('color', '#00FF00').show();
-        // clear canvas
-        // context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-        // start next level with new numbers and animation
-        // level++;
-        // createNumbers(level);
-        // cancelAnimationFrame(animation);
-        // animation = requestAnimationFrame(drawNumbers);
+        $("#answer_text").text("Correct!").css('color', '#00FF00').show();
         addition = false;
         cancelAnimationFrame(animation);
         return winGame = true;
     } else {
-        // $("#answer_text").text("Wrong!").css('color', '#FF0000').show();
+        $("#answer_text").text("Wrong!").css('color', '#FF0000').show();
+        if (mode !== 'infinite') {
+            gameOver(mode);
+        }
     }
 }
 
