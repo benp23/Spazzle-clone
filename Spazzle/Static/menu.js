@@ -4,10 +4,10 @@
  * Description: Adds event listeners and animations/effects to menu.html 
  */
 
-(function(){
+(function() {
 
-    $("#github_button").click(function(){
-        window.location.href = 'https://github.com/Wheels17/Spazzle';
+    $("#github_button").click(function() {
+        window.open('https://github.com/Wheels17/Spazzle', '_blank').focus();
     });
 
     // Menu selection animations/effects
@@ -19,7 +19,7 @@
         });
         thisMenuItem.attr('style', 'transform: translate(1px, -1px); text-shadow: 1px 1px 1px #333333;');
         let menuIndex = thisMenuItem.parent().index();
-        let menuDescription = $("#menu_description")
+        let menuDescription = $("#menu_description");
         if (lastMenuIndex !== menuIndex) {
             menuDescription.hide();
         }
@@ -27,7 +27,8 @@
         switch (menuIndex) {
             case 0:
                 // Speed mode description
-                menuDescriptionText = 'Race against the clock. Reach the highest level you can in the alloted time. If you fail a puzzle, it\'s gameover.';
+                menuDescriptionText = 'Race against the clock. Reach the highest level you can in the alloted time.'
+                    + ' If you fail a puzzle, it\'s gameover.';
                 break;
             case 1:
                 // Level mode description
@@ -49,9 +50,6 @@
 
     // Show/hide modal window
     $("#speed_mode, #level_mode, #infinite_mode").click(function() {
-        /*
-            Retrieve previously used usernames from cookies
-        */
         $("#username_modal").show();
     });
     $("#close_modal").click(function() {
@@ -63,29 +61,78 @@
         }
     });
 
-    $("#start_button").click(function() {
-        let username = $("#username_input").val();
-        /*
-            POST/PUT selected username to API
-                on success = redirect to game
-                on error = error handling
-        */
-        window.location.href += 'game';
-    });
+    // Fetch API error handler
+    function errorHandler(response) {
+        if (!response.ok) {
+            throw Error (response);
+        }
+        return response;
+    }
 
-    $("#username_form").submit(function(event) {
+    // Fetch API call function
+    async function fetchData(url, method, data) {
+        let response = await fetch(url, {
+            method: method,
+            body: JSON.stringify(data),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(errorHandler)
+        .then(function(response) {
+            console.log(response);
+            return response;
+        }).catch(function(error) {
+            console.log(error)
+            return error;
+        });
+        return response;
+    }
+
+    // Get username saved in cookies and display it
+    function getUser() {
+        let getCookies = decodeURIComponent(document.cookie);
+        console.log(getCookies);
+        if (getCookies === '') return;
+        let userCookie = getCookies.split('username=')[1];
+        console.log(userCookie);
+        if (userCookie !== 'undefined') {
+            $("#username_input").val(userCookie);
+        }
+    }
+    getUser();
+
+    // Overwrite username cookie
+    function overwriteUser(username) {
+        let usernameCookie = encodeURIComponent(username);
+        console.log(usernameCookie);
+        document.cookie = "username=" + usernameCookie + "; expires=Wed, 16 Jan 2030 12:00:00 UTC";
+        console.log(document.cookie);
+    }
+
+    // Submit username
+    $("#username_form").submit(async function(event) {
         event.preventDefault();
         let username = $("#username_input").val();
-        /*
-            POST/PUT selected username to API
-                on success = redirect to game
-                on error = error handling
-        */
-        window.location.href += 'game';
+        // Prevent blank username
+        if (username === '') {
+            $("#username_message").text('Username Invalid').css('color', '#FF0000').show();
+            return;
+        }
+        // Register username
+        let usernameResponse = await fetchData('/users/register', 'POST', {username: username});
+        console.log(usernameResponse);
+        if (usernameResponse.ok) {
+            overwriteUser(username);
+            $("#username_message").text('Username Accepted').css('color', '#00FF00').show();
+            // Comment out below line to prevent redirect and view console.log information
+            window.location.href = '/game';
+        } else {
+            $("#username_message").text('Something went wrong. Please try again later.').css('color', '#FF0000').show();
+        }
     });
 
     $("#statistics").click(function() {
-        window.location.href += 'stats';
+        window.location.href = '/stats';
     });
 
 })();
