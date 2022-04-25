@@ -129,7 +129,6 @@ function turnOnSortHandlers() {
         // Move token
         if (!found && sortSelected) {
             sortSelected.move(sortMousePosition.x, sortMousePosition.y);
-            //TODO Figure out how to unselect when token is moved
             sortSelected.selected = false;
             sortSelected = null;
         }

@@ -64,6 +64,7 @@ function startAdditionGame(level) {
         let speedY = Math.floor(Math.random() * 7 - 3);
         numbers[i] = new number(randomNumber, coordX, coordY, fontSize, color, speedX, speedY);
     }
+    $("#answer_input").focus();
     animation = requestAnimationFrame(drawNumbers);
 }
 

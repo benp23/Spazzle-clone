@@ -108,7 +108,8 @@ $.when(
     $.getScript('/static/color_matcher.js'),
     $.getScript('/static/sort_canvas.js'),
     $.getScript('/static/addition_animated.js'),
-    $.getScript('/static/image_matching.js')
+    $.getScript('/static/image_matching.js'),
+    $.getScript('/static/word_scramble.js')
 
 ).done(function() {
     console.log('Done loading game scripts.');
@@ -171,7 +172,8 @@ $.when(
         startColorGame,
         startSortingGame,
         startImageGame,
-        startAdditionGame
+        startAdditionGame,
+        startWordScramble,
     ];
 
     // Loop through each game, then level up
