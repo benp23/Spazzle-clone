@@ -1,8 +1,7 @@
 // Global variables
 let winGame = false;
 let level = 1;
-// GET MODE FROM SERVER/FLASK (use async/await)
-const mode = ''; // 'speed', 'level', 'infinite'
+let totalTime;
 const quitButton = $("#quit_button");
 const gameHeading = $("#game_heading");
 const levelNumber = $("#level_number");
@@ -19,18 +18,6 @@ function resizeCanvas() {
     gameCanvas.width = gameCanvasID.width();
 }
 
-// Total game time in seconds - starting number based on game mode;
-let totalTime;
-if (mode === 'speed') {
-    totalTime = 5 * 60;
-    gameTimer.text('0:05:00');
-} else {
-    totalTime = 0;
-    gameTimer.text('0:00:00');
-}
-let seconds;
-let minutes;
-let hours;
 // Add given amount of seconds to timer and format it
 function changeTime(amount) {
     if (mode === 'speed') {
@@ -38,9 +25,9 @@ function changeTime(amount) {
     } else {
         totalTime += amount;
     }
-    seconds = totalTime;
-    minutes = 0;
-    hours = 0;
+    let seconds = totalTime;
+    let minutes = 0;
+    let hours = 0;
     if (seconds >= 60) {
         minutes = Math.floor(seconds / 60);
         seconds %= 60;
@@ -61,7 +48,7 @@ function changeTime(amount) {
     gameTimerText = hours + ':' + minutes + ':' + seconds;
     gameTimer.text(gameTimerText);
     // For speed mode when timer reaches 0
-    if (totalTime <= 0) {
+    if (totalTime <= 0 && mode === 'speed') {
         return gameOver(mode);
     }
     return gameTimerText;
@@ -73,8 +60,10 @@ function gameOver(mode) {
     /*
      * FINAL POST TO SERVER
      */
-    if (mode === 'speed') {
-        alert('Time\'s up! Congratulations, you reached level '
+    if (mode === 'error') {
+        alert('Oops, something went wrong. Unable to read game mode from cookies. Returning home.');
+    } else if (mode === 'speed') {
+        alert('Game Over! Congratulations, you reached level '
             + level + '! Returning home.');
     } else {
         alert('Game Over! Congratulations, you reached level '
@@ -82,6 +71,32 @@ function gameOver(mode) {
     }
     window.location.href = '/';
 }
+
+// Read game mode from cookies
+function readMode() {
+    let getCookies = decodeURIComponent(document.cookie);
+    if (getCookies === '') {
+        gameOver('error');
+        return 'error';
+    }
+    let modeMatch = getCookies.match(/gamemode=(.*?)(;|$)/);
+    if (modeMatch !== null && modeMatch[1] !== undefined && modeMatch[1] !== '') {
+        // Total game time in seconds - starting number based on game mode;
+        if (modeMatch[1] === 'speed') {
+            totalTime = 5 * 60;
+            gameTimer.text('0:05:00');
+        } else {
+            totalTime = 0;
+            gameTimer.text('0:00:00');
+        }
+        return modeMatch[1];
+    } else {
+        gameOver('error');
+        return 'error';
+    }
+}
+// Set the game mode
+const mode = readMode();
 
 // End the game
 quitButton.click(function() {
@@ -101,15 +116,13 @@ $.when(
     // Timer variables
     const oneSecond = 1000;
     let expectedTime = Date.now() + oneSecond;
-    let drift;
-    let numberOfSeconds;
     /* setTimeout/setInterval do not track time accurately.
      * Use the Date object to correct the time.
      */
     function timer() {
         // Find the drift in milliseconds to correct the timer
-        drift = Date.now() - expectedTime;
-        numberOfSeconds = 1;
+        let drift = Date.now() - expectedTime;
+        let numberOfSeconds = 1;
         // Correct timer if its off by more than one second
         if (drift > oneSecond) {
             // How many whole seconds off, and remainder?
