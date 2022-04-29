@@ -38,6 +38,7 @@ function number(number, x, y, fs, c, sx, sy) {
 // Create random numbers between 1-9, with random coordinates, fixed color, and random speed
 function startAdditionGame(level) {
     addition = true;
+    $("#answer_text").text('').hide();
     gameHeading.text('Find the sum!');
     gameCanvasID.show();
     answerInline.show();
@@ -68,40 +69,50 @@ function startAdditionGame(level) {
     animation = requestAnimationFrame(drawNumbers);
 }
 
+// Force 60 fps animations on high refresh rate monitors
+const millisecondsPerFrame = 1000 / 60;
+let previousTime = Date.now();
 // draw number function to be called each animation frame
 function drawNumbers() {
-    // clear canvas before redrawing
-    context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-    // determine each number's new coordinates and redraw them
-    for (let i = 0; i < numbers.length; i++) {
-        numbers[i].x += numbers[i].speedX;
-        numbers[i].y += numbers[i].speedY;
-        // check if the number has reached a side of the canvas,
-        // then reverse speed positive to negative or negative to positive
-        if (numbers[i].x > gameCanvas.width - fontSize) {
-            numbers[i].speedX *= -1;
-            numbers[i].x = gameCanvas.width - fontSize;
+    // Only draw if enough time has passed
+    let now = Date.now();
+    let elapsedTime = now - previousTime;
+    if (elapsedTime > millisecondsPerFrame) {
+        let leftoverTime = elapsedTime % millisecondsPerFrame;
+        previousTime = now - leftoverTime;
+        // clear canvas before redrawing
+        context.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        // determine each number's new coordinates and redraw them
+        for (let i = 0; i < numbers.length; i++) {
             numbers[i].x += numbers[i].speedX;
-        }
-        if (numbers[i].x < 0) {
-            numbers[i].speedX *= -1;
-            numbers[i].x = 0;
-            numbers[i].x += numbers[i].speedX;
-        }
-        if (numbers[i].y > gameCanvas.height) {
-            numbers[i].speedY *= -1;
-            numbers[i].y = gameCanvas.height;
             numbers[i].y += numbers[i].speedY;
+            // check if the number has reached a side of the canvas,
+            // then reverse speed positive to negative or negative to positive
+            if (numbers[i].x > gameCanvas.width - fontSize) {
+                numbers[i].speedX *= -1;
+                numbers[i].x = gameCanvas.width - fontSize;
+                numbers[i].x += numbers[i].speedX;
+            }
+            if (numbers[i].x < 0) {
+                numbers[i].speedX *= -1;
+                numbers[i].x = 0;
+                numbers[i].x += numbers[i].speedX;
+            }
+            if (numbers[i].y > gameCanvas.height) {
+                numbers[i].speedY *= -1;
+                numbers[i].y = gameCanvas.height;
+                numbers[i].y += numbers[i].speedY;
+            }
+            if (numbers[i].y < fontSize) {
+                numbers[i].speedY *= -1;
+                numbers[i].y = fontSize;
+                numbers[i].y += numbers[i].speedY;
+            }
+            // draw the number
+            context.fillStyle = numbers[i].color;
+            context.font = numbers[i].fontsize + "px Arial";
+            context.fillText(numbers[i].number, numbers[i].x, numbers[i].y);
         }
-        if (numbers[i].y < fontSize) {
-            numbers[i].speedY *= -1;
-            numbers[i].y = fontSize;
-            numbers[i].y += numbers[i].speedY;
-        }
-        // draw the number
-        context.fillStyle = numbers[i].color;
-        context.font = numbers[i].fontsize + "px Arial";
-        context.fillText(numbers[i].number, numbers[i].x, numbers[i].y);
     }
     // recursive animation request
     animation = requestAnimationFrame(drawNumbers);
