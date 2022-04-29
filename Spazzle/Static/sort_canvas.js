@@ -1,4 +1,10 @@
 /*
+ * File: sort_canvas.js
+ * Author: Troy Scites
+ * Date: 04/03/2022
+ * Description: Creates green and blue goals and tokens on a
+ * canvas. Tokens have to be moved to their respective goals.
+ *
  * References
  *
  * https://www.javascripttutorial.net/sample/webapis/canvas/
@@ -11,16 +17,20 @@ let canvas = document.getElementById("canvas");
 let level = 4;
 */
 
+// Calling this global function from main.js
+resizeCanvas();
+let halfCanvasHeight = gameCanvas.height / 2;
+
 let goals = [];
 let tokens = [];
-
 // Build the goals and tokens
 function buildGoalsAndTokens(level) {
     // Empty the arrays
     goals = [];
     tokens = [];
-    goals[0] = new token(0, 100, 50, 100, 'green', false, false);
-    goals[1] = new token(450, 100, 50, 100, 'blue', false, false);
+    //goals[0] = new token(0, (halfCanvasHeight - 75), 75, 150, 'green', false, false);
+    goals[0] = new token(0, (halfCanvasHeight - 75), 75, 150, 'green', false, false);
+    goals[1] = new token((gameCanvas.width - 75), (halfCanvasHeight - 75), 75, 150, 'blue', false, false);
     for (let i = 0; i < level; i++) {
     	tokens[i] = randomSquare('green');
     }
@@ -37,28 +47,28 @@ let sortSelected;
 
 // Randomly choose location of token
 function randomSquare(color) {
-	// random start between 52 and 428 for x
-	let x = Math.floor(Math.random() * (428 - 52)) + 52;
-	// random start between 2 and 278 for y
-	let y = Math.floor(Math.random() * 276) + 2;
+	// random start between the width of the canvas for x
+	let x = Math.floor(Math.random() * (gameCanvas.width - 228)) + 78;
+	// random start between the height of the canvas for y
+	let y = Math.floor(Math.random() * (gameCanvas.height - 30)) + 2;
 	return new token(x, y, 20, 20, color, true, true);
 }
 
 function checkAllTokensAreInGoals() {
-    console.log("Checking if all tokens are in their goals.");
+    //console.log("Checking if all tokens are in their goals.");
     let blueTokensCleared = 0;
     let greenTokensCleared = 0;
     $.each(tokens, (i, token) => {
         switch(token.color) {
             case 'green':
                 // check all boxes are in green goal
-                if (token.x < 50 && token.y > 101 && token.y < 180) {
+                if (token.x < 75 && token.y > goals[0].y && token.y < (goals[0].y + 130)) {
                     greenTokensCleared++;
 		        }
                 break;
             case 'blue':
                 // check all boxes are in blue goal
-                if (token.x > 450 && token.y > 101 && token.y < 180) {
+                if (token.x > goals[1].x && token.y > goals[1].y && token.y < (goals[1].y + 130)) {
                     greenTokensCleared++;
 		        }
         }
@@ -166,8 +176,6 @@ function clearSort() {
 function startSortingGame(level) {
     gameHeading.text('Sort the Colors Into the Goals!');
     gameCanvasID.show();
-    // Calling this global function from main.js
-    resizeCanvas();
     // Functions to start the game
     turnOnSortHandlers();
     buildGoalsAndTokens(level);
