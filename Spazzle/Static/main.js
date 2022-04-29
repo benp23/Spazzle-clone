@@ -11,6 +11,7 @@ const gameCanvas = gameCanvasID.get(0);
 const context = gameCanvas.getContext("2d");
 const gameDiv = $("#game_div");
 const answerInline = $("#answer_inline");
+let colorMatchOrder = [];
 
 // Match canvas html size with canvas element size
 function resizeCanvas() {
