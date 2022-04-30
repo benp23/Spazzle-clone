@@ -55,7 +55,7 @@ api.add_resource(total_games, '/game/total')
 api.add_resource(single_games, '/game/time')
     #Post info: "username":<string>, "game_run":<int>, "game_type":<int>, "game_time":<float>
     #Get info: "username":<string>, "game_run":<int>, "game_type":<int>
-api.add_resource(statistics, '/stats/average')
+api.add_resource(statistics, '/stats')
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
