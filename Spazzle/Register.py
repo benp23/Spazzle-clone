@@ -54,14 +54,17 @@ class Register(Resource):
                                     CREATE TABLE IF NOT EXISTS {user}_game_total_table
                                     (game_run INT PRIMARY KEY NOT NULL,
                                     game_mode TEXT NOT NULL,
+                                    level_reached INT NOT NULL,
                                     game_total_time REAL);
                                     '''.format(user=username_string)
                                     
         
         create_single_game_table_for_user = '''
                                     CREATE TABLE IF NOT EXISTS {user}_game_times_table
-                                    (game_run INT NOT NULL, 
-                                    game_type TEXT NOT NULL, 
+                                    (game_run INT NOT NULL,
+                                    game_mode TEXT,
+                                    game_level INT NOT NULL,
+                                    game_type TEXT NOT NULL,
                                     game_time REAL);
                                     '''.format(user=username_string)
                                     
