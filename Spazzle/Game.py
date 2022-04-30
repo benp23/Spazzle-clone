@@ -27,6 +27,11 @@ class total_games(Resource):
                         required = False,
                         help = "no game mode"
                         )
+    parser.add_argument('level_reached',
+                        type = int,
+                        required = False,
+                        help = "No level entered"
+                        )
     parser.add_argument('total_game_time',
                         type = float,
                         required = False,
@@ -65,7 +70,7 @@ class total_games(Resource):
         
         row = self.find_game(table_name, data['game_run'])
         if row:
-            return {"game_run":row[0], "game_mode":row[1], "total_game_time":row[2]} 
+            return {"game_run":row[0], "game_mode":row[1], "Level Reached":row[2], "total_game_time":row[3]} 
        
         return {"message": "No Game Found"}
        
@@ -90,16 +95,18 @@ class total_games(Resource):
         
         if row:
             #return {"message": "That game is already entered. Use Put if changes are needed"}
-            return {"message": "Game Run is already entered", "game_run": data['game_run'], "game_mode": data['game_mode'], "total_game_time": data['total_game_time']}
+            return {"message": "Game Run is already entered", "game_run": data['game_run'], "game_mode": data['game_mode'],
+                    "Level Reached": data['level_reached'], "total_game_time": data['total_game_time']}
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        query = "INSERT INTO {table} VALUES (?, ?, ?)".format(table=table_name)
-        cursor.execute(query, (data['game_run'], data['game_mode'], data['total_game_time']))
+        query = "INSERT INTO {table} VALUES (?, ?, ?, ?)".format(table=table_name)
+        cursor.execute(query, (data['game_run'], data['game_mode'], data['level_reached'], data['total_game_time']))
 
         connection.commit()
         connection.close()
         
-        return {"message": "Game Run added", "game_run": data['game_run'], "game_mode": data['game_mode'], "total_game_time": data['total_game_time']}
+        return {"message": "Game Run added", "game_run": data['game_run'], "game_mode": data['game_mode'], 
+                "level_reached": data['level_reached'], "total_game_time": data['total_game_time']}
         
         
         
@@ -115,6 +122,15 @@ class single_games(Resource):
                         type = int,
                         required = True,
                         help = "Not accepted format for Game run"
+                        )
+    parser.add_argument('game_mode',
+                        required = False,
+                        help = "no game mode"
+                        )
+    parser.add_argument('game_level',
+                        type = int,
+                        required = True,
+                        help = "No level entered"
                         )
     parser.add_argument('game_type',
                         required = True,
@@ -140,12 +156,14 @@ class single_games(Resource):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
-        query = "INSERT INTO {table} VALUES (?,?,?)".format(table=table_name)
-        cursor.execute(query, (data['game_run'], data['game_type'], data['game_time']))
+        query = "INSERT INTO {table} VALUES (?,?,?,?,?)".format(table=table_name)
+        cursor.execute(query, (data['game_run'], data['game_mode'], data['game_level'], 
+                                data['game_type'], data['game_time']))
         connection.commit()
         connection.close()
         
-        return {"message": "Game Run added", "game_run":data['game_run'], "game_type": data['game_type'], "game_time": data['game_time']}
+        return {"message": "Game Run added", "game_run":data['game_run'], "game_mode":data['game_mode'], 
+                "game_level": data['game_level'], "game_type": data['game_type'], "game_time": data['game_time']}
         
         
     def get(self):
