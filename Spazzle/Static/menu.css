@@ -152,19 +152,19 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal_content {
+#modal_content {
     width: 50%;
     margin: auto;
     position: relative;
     top: 40%;
-    border: 1px solid #888;
+    border: 1px solid #888888;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%),
-                0 6px 20px 0 rgb(0 0 0 / 19%);
-    animation-name: animatetop;
+                0 8px 16px 0 rgb(0 0 0 / 10%);
+    animation-name: modalDrop;
     animation-duration: 0.4s;
 }
 
-.modal_header {
+#modal_header {
     padding: 5px 15px;
     background-color: #eeeeee;
     color: #333333;
@@ -183,20 +183,26 @@ body {
   cursor: pointer;
 }
 
-.modal_body {
+#modal_body {
     padding: 5px 15px;
     background-color: #333333;
 }
 
-.modal_footer {
+#modal_footer {
     padding: 5px 15px;
     background-color: #eeeeee;
     color: #333333;
 }
   
-@keyframes animatetop {
-    from {top: -10%; opacity: 0}
-    to {top: 40%; opacity: 1}
+@keyframes modalDrop {
+    from {
+        top: -10%;
+        opacity: 0
+    }
+    to {
+        top: 40%;
+        opacity: 1
+    }
 }
 
 #username_form {
