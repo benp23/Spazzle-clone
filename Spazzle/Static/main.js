@@ -16,6 +16,7 @@ const errorText = $("#error_text");
 const leaderboardModal = $("#leaderboard_modal");
 const finalMessage = $("#final_message");
 const returnButton = $("#return_button");
+let colorMatchOrder = [];
 
 // Match canvas html size with canvas element size
 function resizeCanvas() {
