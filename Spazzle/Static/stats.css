@@ -2,6 +2,11 @@ body {
     background-color: #eeeeee;
 }
 
+@font-face {
+    font-family: 'Arbutus Slab';
+    src: url('/static/fonts/Arbutus_Slab/ArbutusSlab-Regular.ttf');
+}
+
 #stats_heading {
     margin: 8vh 7vw;
 }

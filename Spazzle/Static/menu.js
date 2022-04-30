@@ -27,7 +27,7 @@
         switch (menuIndex) {
             case 0:
                 // Speed mode description
-                menuDescriptionText = 'Race against the clock. Reach the highest level you can in the alloted time.'
+                menuDescriptionText = 'Race against the clock. Reach the highest level you can in the allotted time.'
                     + ' If you fail a puzzle, it\'s gameover.';
                 break;
             case 1:
