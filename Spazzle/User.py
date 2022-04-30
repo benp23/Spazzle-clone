@@ -18,20 +18,27 @@ class User(Resource):
     
     parser = reqparse.RequestParser()
     parser.add_argument('username',
-                        required = True,
+                        required = False,
                         help = "Please enter a username"
+                        )
+    parser.add_argument('game_mode',
+                        type = int,
+                        required = False,
+                        help = "Game mode not selected"
                         )
     
     def get(self):
         data = User.parser.parse_args()
         if User.find_user(data['username']):
             return {"message": data['username']+ " accepted"}
-        return {"message": data['username'] + " rejected"}
+        return {"message": data['username'] + " needs to register"}
     #if not in table, return error (do not register)
     #not really needed on its own. Might include as a method to "get all"
     
     def post(self):
         #will increment game
+        data = User.parser.parse_args()
+        #will add functionality after
         return {"message":"Incremented"}
     
     
