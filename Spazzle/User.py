@@ -22,11 +22,17 @@ class User(Resource):
                         help = "Please enter a username"
                         )
     
-    #def get(self):
+    def get(self):
+        data = User.parser.parse_args()
+        if User.find_user(data['username']):
+            return {"message": data['username']+ " accepted"}
+        return {"message": data['username'] + " rejected"}
     #if not in table, return error (do not register)
     #not really needed on its own. Might include as a method to "get all"
     
-    #def post(self):
+    def post(self):
+        #will increment game
+        return {"message":"Incremented"}
     
     
     @classmethod
@@ -35,7 +41,7 @@ class User(Resource):
             Description: Returns boolean if user already exists in database.
             Parameters
             ----------
-                username: Str, Required, Unique
+                username: Str, Required, Uniques
         """
         connect = sqlite3.connect('data.db')
         cursor = connect.cursor()
