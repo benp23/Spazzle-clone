@@ -54,7 +54,7 @@ class Register(Resource):
                                     CREATE TABLE IF NOT EXISTS {user}_game_total_table
                                     (game_run INT PRIMARY KEY NOT NULL,
                                     game_mode TEXT NOT NULL,
-                                    level_reached INT NOT NULL,
+                                    level_reached INT,
                                     game_total_time REAL);
                                     '''.format(user=username_string)
                                     

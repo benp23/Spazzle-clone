@@ -20,6 +20,8 @@ api=Api(app)
 
 #create database for use
 db = db_c('data')
+db.leader_set(100)
+
 
 #set hmtl routes
 @app.route('/')
