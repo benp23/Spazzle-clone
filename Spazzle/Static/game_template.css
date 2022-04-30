@@ -2,7 +2,107 @@ body {
     margin: 0;
 }
 
+@font-face {
+    font-family: 'Alfa Slab One';
+    src: url('/static/fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Arbutus Slab';
+    src: url('/static/fonts/Arbutus_Slab/ArbutusSlab-Regular.ttf');
+}
+
+#leaderboard_modal {
+    display: none;
+    overflow: auto;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#leaderboard_content {
+    background-color: #eeeeee;
+    padding: 30px;
+    width: 25%;
+    margin: auto;
+    position: relative;
+    top: 8%;
+    border: 1px solid #888888;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 8px 16px 0 rgb(0 0 0 / 10%);
+    animation-name: modalDrop;
+    animation-duration: 0.4s;
+}
+
+@keyframes modalDrop {
+    from {
+        top: -10%;
+        opacity: 0
+    }
+    to {
+        top: 8%;
+        opacity: 1
+    }
+}
+
+#close_modal {
+    color: #333333;
+    padding-left: 20px;
+    float: right;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+#close_modal:hover {
+  color: #d3d3d3;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#final_message {
+    font-family: 'Arbutus Slab', sans-serif;
+    font-size: 20px;
+    text-align: center;
+}
+
+#leaderboard_list {
+    list-style-type: decimal;
+    font-size: 18px;
+}
+
+#leaderboard_title {
+    font-family: 'Alfa Slab One', sans-serif;
+}
+
+.leaderboard_item {
+    font-family: 'Arbutus Slab', sans-serif;
+    padding-top: 15px;
+}
+
+.leaderboard_user {
+
+}
+
+.leaderboard_stat {
+
+}
+
+#return_button {
+    margin: auto;
+    display: block;
+    padding: 5px;
+    margin-top: 25px;
+    font-family: inherit;
+    font-size: 24px;
+    cursor: pointer;
+    color: #800080;
+}
+
 #game_container {
+    font-family: 'Arbutus Slab', sans-serif;
     height: 100vh;
     width: 100vw;
 }
@@ -21,7 +121,9 @@ body {
 }
 
 #quit_button {
+    font-family: inherit;
     font-size: inherit;
+    cursor: pointer;
 }
 
 #game_heading {
@@ -30,6 +132,12 @@ body {
 
 #timer_heading {
     width: 25%;
+}
+
+#game_timer {
+    width: 100px;
+    display: inline-block;
+    text-align: left;
 }
 
 #game_canvas {
@@ -54,4 +162,13 @@ body {
 #answer_text {
     margin-left: 10px;
     display: none;
+}
+
+#error_text {
+    font-family: initial;
+    right: 7%;
+    max-width: 30%;
+    text-align: center;
+    color: #ff0000;
+    position: absolute;
 }
