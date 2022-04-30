@@ -36,6 +36,7 @@ class db_c:
                                     '''
                 self.create(create_leader_board)
                 connection.close() #closes connection to database
+                
                 return
         except Error:
             return Error
@@ -78,6 +79,7 @@ class db_c:
                                     CREATE TABLE IF NOT EXISTS game_times_table
                                     (username TEXT NOT NULL, 
                                     game_type INTEGER NOT NULL, 
+                                    level_reached INTEGER,
                                     game_time REAL);
                                     '''
             cursor.execute(create_game_times_table)
