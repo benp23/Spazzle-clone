@@ -210,7 +210,8 @@ $.when(
     $.getScript('/static/sort_canvas.js'),
     $.getScript('/static/addition_animated.js'),
     $.getScript('/static/image_matching.js'),
-    $.getScript('/static/word_scramble.js')
+    $.getScript('/static/word_scramble.js'),
+    $.getScript('/static/number_sort.js')
 
 ).done(function() {
     console.log('Done loading game scripts.');
@@ -278,6 +279,7 @@ $.when(
         startImageGame,
         startAdditionGame,
         startWordScramble,
+        startNumberSort,
     ];
 
     // The time an individual game starts
