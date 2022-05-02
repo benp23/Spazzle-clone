@@ -285,6 +285,13 @@ function turnOffNumSortHandlers() {
   gameCanvasID.off('mousemove');
 }
 
+// Need to clear arrays between games.
+function resetNumSortArrays() {
+  numOrder = [];
+  numTiles = [];
+  numFrames = [];
+}
+
 // This function removes all canvas objects to prepare them to be
 // redrawn.
 function clearNumSort() {
@@ -306,6 +313,7 @@ function startNumberSort(level) {
   gameCanvasID.show();
   resizeCanvas();
   turnOnNumSortHandlers();
+  resetNumSortArrays();
   buildNumArray(level);
   buildNumTiles();
   buildNumSortFrame();
