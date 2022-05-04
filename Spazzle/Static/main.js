@@ -2,7 +2,9 @@
 let winGame = false;
 let endGame = false;
 let level = 1;
+// let gameRun;
 let totalTime;
+const speedModeSeconds = 300;
 const quitButton = $("#quit_button");
 const gameHeading = $("#game_heading");
 const levelNumber = $("#level_number");
@@ -67,6 +69,7 @@ function changeTime(amount) {
     gameTimer.text(gameTimerText);
     // For speed mode when timer reaches 0
     if (totalTime <= 0 && mode === 'speed') {
+        totalTime = 0;
         return gameOver(mode);
     }
     return gameTimerText;
@@ -86,6 +89,7 @@ function failMessage(response) {
 
 // Post game data
 async function postData(url, method, data) {
+    console.log(data);
     let response = await fetch(url, {
         method: method,
         body: JSON.stringify(data),
@@ -110,6 +114,7 @@ async function postData(url, method, data) {
             return error;
         }
     });
+    console.log(response);
     if (!response.ok) {
         // Notify the user of any API errors
         failMessage(response);
@@ -129,16 +134,19 @@ async function gameOver(mode) {
     let finalMessage = '';
     // Final POST to server
     if (mode !== 'error') {
-        let finalResponse = await postData('/game/total', 'POST',
-            {username: username, game_run: 1, game_mode: mode, total_game_time: totalTime});
+        if (mode === 'speed') {
+            totalTime = speedModeSeconds - totalTime;
+        }
+        let finalResponse = await postData('/game/total', 'PUT',
+            {username: username, level_reached: level, total_game_time: totalTime});
         if (!finalResponse.ok) {
-            finalMessage = '⚠ Connection error: '
+            finalMessage = ' ⚠ Connection error: '
                 + finalResponse.status + ' - ' + finalResponse.statusText + '. Your final stats failed to save.';
         }
     }
     // Return to home if there is an error reading from cookies
     if (mode === 'error') {
-        alert('⚠ Oops, something went wrong. Unable to read username and/or game mode from cookies.'
+        alert('⚠ Oops, something went wrong. Unable to retrieve username and/or game mode from cookies/server.'
             + finalMessage + ' Returning home.');
         window.location.href = '/';
     }
@@ -152,7 +160,6 @@ async function gameOver(mode) {
             + finalTime + '!' + finalMessage;
         showLeaderboard(mode, finalMessage);
     }
-    return;
 }
 
 // Read username from cookies
@@ -184,7 +191,7 @@ function readMode() {
     if (modeMatch !== null && modeMatch[1] !== undefined && modeMatch[1] !== '') {
         // Total game time in seconds - starting number based on game mode;
         if (modeMatch[1] === 'speed') {
-            totalTime = 5 * 60;
+            totalTime = speedModeSeconds;
             gameTimer.text('0:05:00');
         } else {
             totalTime = 0;
@@ -213,8 +220,26 @@ $.when(
     $.getScript('/static/word_scramble.js'),
     $.getScript('/static/number_sort.js')
 
-).done(function() {
+).done(async function() {
     console.log('Done loading game scripts.');
+
+    // POST username and game mode to start game run
+    async function createGame() {
+        let gameResponse = await postData('/users', 'POST', {username: username, game_mode: mode});
+        console.log(gameResponse);
+        if (!gameResponse.ok) {
+            gameOver('error');
+            return;
+        } else {
+            /*
+            await gameResponse.json().then(function(data) {
+                gameRun = data.message + 1;
+                console.log(gameRun);
+            });
+            */
+        }
+    }
+    await createGame();
 
     // Timer variables
     const oneSecond = 1000;
@@ -304,13 +329,13 @@ $.when(
             gameTime = endTime - startTime;
             levelTime += gameTime;
             startTime = endTime;
-            postData('/game/time', 'POST', {username: username, game_run: 1, game_type: i + 1, game_time: gameTime});
+            postData('/game/time', 'POST', {username: username, game_run: 1, game_mode: mode,
+                game_type: gameFunctions[i].name, game_level: level, game_time: gameTime});
             eraseGame();
         }
-        /*
-         * POST LEVEL COMPLETION DATA TO SERVER
-         */
-        //postData();
+        // Post level data
+        postData('/game/time', 'POST', {username: username, game_run: 1, game_mode: mode,
+            game_type: 'level'+level, game_level: level, game_time: levelTime});
         levelTime = 0;
         level++;
         startLevel(level);
