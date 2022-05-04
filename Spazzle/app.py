@@ -58,4 +58,4 @@ api.add_resource(single_games, '/game/time')
 api.add_resource(statistics, '/stats')
 
 if __name__ == '__main__':
-    app.run(port = 5000, debug = True)
+    app.run(host = "0.0.0.0", port = 5000, debug = True, ssl_context="adhoc")
