@@ -90,7 +90,7 @@ class total_games(Resource):
         global class_user
         
         table_name = data['username'] + self.TABLE_NAME
-        #current_game_run = class_user.find_current_game_run_number(table_name)
+        #current_game_run = class_user.find_current_game_run_number(table_name) 
         
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
