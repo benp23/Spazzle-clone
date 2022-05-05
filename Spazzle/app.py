@@ -53,7 +53,7 @@ api.add_resource(User, '/users')
 api.add_resource(Register, '/users/register')
 api.add_resource(total_games, '/game/total/<int:game_run>') 
 api.add_resource(single_games, '/game/time')
-api.add_resource(statistics, '/stats/<string:username>')
+api.add_resource(statistics, '/stats/<string:username>/<string:stat>')
 api.add_resource(leaderboard, '/leaders/<string:game_mode>/<int:top_number>')
 
 if __name__ == '__main__':
