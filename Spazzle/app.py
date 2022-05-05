@@ -13,6 +13,7 @@ from User import User
 from Register import Register
 from Game import total_games, single_games
 from statistics import statistics
+from leaderboard import leaderboard
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -30,7 +31,8 @@ db.leader_set(100)
 def menu():
     return render_template('menu.html')
 
-@app.route('/game')
+@app.route('/game', methods = ['GET', 'PUT','POST'])
+@app.route('/game/total', methods = ['GET', 'PUT'])
 def game():
     return render_template('game_template.html')
     
@@ -49,13 +51,15 @@ def gametest2():
 #set api functionality routes
 api.add_resource(User, '/users')
 api.add_resource(Register, '/users/register') #"username":<string>
-api.add_resource(total_games, '/game/total') 
+api.add_resource(total_games, '/game/total/<int:game_run>') 
+
     #post info :: "username":<string>, "game_run":<int>, "total_game_time":float
     #get into :: "username":<string>, "game_run":<int>
 api.add_resource(single_games, '/game/time')
     #Post info: "username":<string>, "game_run":<int>, "game_type":<int>, "game_time":<float>
     #Get info: "username":<string>, "game_run":<int>, "game_type":<int>
 api.add_resource(statistics, '/stats')
+api.add_resource(leaderboard, '/leaders')
 
 if __name__ == '__main__':
     app.run(port = 5000, debug = True)
