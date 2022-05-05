@@ -12,7 +12,7 @@ from db_create import db_c
 #using reqparse despite its depreciated status
 
 class Register(Resource):
-    """
+    """ 
         Description: Checks and registers username
     """
     TABLE_NAME = 'user_table'
