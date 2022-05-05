@@ -27,15 +27,28 @@ class db_c:
                                 (username TEXT NOT NULL PRIMARY KEY,
                                 ID INTEGER);
                                 '''
-                self.create(create_user_table)
-                create_leader_board = '''
-                                    CREATE TABLE IF NOT EXISTS leaderboard
-                                    (position INT NOT NULL PRIMARY KEY,
+                self.create(create_user_table)              
+                create_speed_board = '''
+                                    CREATE TABLE IF NOT EXISTS speed_leaderboard
+                                    (position INT PRIMARY KEY,
                                     username TEXT,
-                                    time REAL);
+                                    game_level INT,
+                                    game_time REAL,
+                                    game_mode TEXT
+                                    );
                                     '''
-                self.create(create_leader_board)
-                connection.close() #closes connection to database
+                self.create(create_speed_board)
+                create_level_board = '''
+                                    CREATE TABLE IF NOT EXISTS level_leaderboard
+                                    (position INT PRIMARY KEY,
+                                    username TEXT,
+                                    game_level INT,
+                                    game_time REAL,
+                                    game_mode TEXT
+                                    );
+                                    '''
+                self.create(create_level_board)
+                connection.close()
                 
                 return
         except Error:
@@ -61,7 +74,23 @@ class db_c:
             return Error
             
 
-"""
+
+    def leader_set(self, positions):
+        try:
+            global dbname
+            connection = sqlite3.connect(dbname)
+            cursor = connection.cursor()
+            
+            for number in range(positions):
+                query = '''INSERT INTO {table} VALUES (?,'', -1, -1, '');'''.format(table = "speed_leaderboard")
+                cursor.execute(query, (number + 1,))
+                query = '''INSERT INTO {table} VALUES (?,'', -1, -1, '');'''.format(table = "level_leaderboard")
+                cursor.execute(query, (number + 1,))
+            connection.commit()
+            connection.close()
+        except Error:
+            return Error
+    """
   try:
             global dbname
             connection = sqlite3.connect(dbname)
