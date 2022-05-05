@@ -44,7 +44,7 @@ class User(Resource):
     def post(self):
         '''
             Post will be when page loads
-            increments the game_run and adds it to the total table
+            increments  the game_run and adds it to the total table
             also adds in the game mode of that run
         '''
         global game_mode

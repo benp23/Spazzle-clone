@@ -2,7 +2,7 @@
     File: statistics.py
     Authors: Spencer Wheeler, Benjamin Paul, Troy Scites
     Description: This class provides API functionality for the statistics page
-                as well as access to the data class
+                as well as access to the data class 
                 
 """
 
@@ -29,13 +29,13 @@ class statistics(Resource):
         return {"message": "Function not supported"}
 
 
-    def get(self):
-        json_input = statistics.parser.parse_args()
+    def get(self, username, stat):
+        #json_input = statistics.parser.parse_args()
         
-        d = data(json_input['username'])
-        if json_input['stat'] == 'average':
-            return {"average": d.get_average_time(json_input['games_back'])}
-        if json_input['stat'] == 'total_game_count':
+        d = data(username)
+        if stat == 'average':
+            return {"average": d.get_average_time()}
+        if stat == 'total_game_count':
             return {"Games Played: ": d.get_game_count()}
         else:
             return {"message": "Stat not supported"}

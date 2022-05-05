@@ -92,7 +92,7 @@ class db_c:
             return Error
     """
   try:
-            global dbname
+            global dbname 
             connection = sqlite3.connect(dbname)
             cursor = connection.cursor()
             

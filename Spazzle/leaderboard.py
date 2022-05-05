@@ -11,12 +11,12 @@ class leaderboard(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('game_mode',
-                        required = False,
+                        required = True,
                         help = "No game mode chosen"
                         )
     parser.add_argument('top_number',
                         type = int,
-                        required = False,
+                        required = True,
                         help = "Please select a number"
                         )
     
@@ -45,12 +45,12 @@ class leaderboard(Resource):
         rows = cursor.execute(query).fetchall()
 
     def get(self, game_mode, top_number):
-        data = leaderboard.parser.parse_args()
+        #data = leaderboard.parser.parse_args()
         
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
         
-        table_name = "{mode}_leaderboard".format(mode = game_mode)
+        table_name = "{mode}_leaderboard".format(mode = game_mode.lower())
         
         query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
         rows = cursor.execute(query).fetchmany(top_number)

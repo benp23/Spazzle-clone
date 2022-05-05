@@ -10,7 +10,7 @@ class data:
     """
         
         To DO:
-            implement error for user registration
+            implement error for user registration 
     """
     tempuser = User()
     username = ''
@@ -47,7 +47,7 @@ class data:
         return count
         
         
-    def get_average_time(self, count):
+    def get_average_time(self):
         
         global username
         TABLE_NAME = username + '_game_total_table'
@@ -65,7 +65,25 @@ class data:
         
         return rows
         
+    '''
+    def get_average_time(self, count):
+        
+        global username
+        TABLE_NAME = username + '_game_total_table'
+        
+        if not User.find_user(username):
+           return "Please Register First" 
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+                
+        query = "SELECT AVG(game_total_time) from {table}".format(table = TABLE_NAME)
+        
+        rows = cursor.execute(query).fetchone()[0]
+        
+        connection.close()
+        
+        return rows
     
-
+    '''
     
     
