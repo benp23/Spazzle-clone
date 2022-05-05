@@ -52,14 +52,9 @@ def gametest2():
 api.add_resource(User, '/users')
 api.add_resource(Register, '/users/register') #"username":<string>
 api.add_resource(total_games, '/game/total/<int:game_run>') 
-
-    #post info :: "username":<string>, "game_run":<int>, "total_game_time":float
-    #get into :: "username":<string>, "game_run":<int>
 api.add_resource(single_games, '/game/time')
-    #Post info: "username":<string>, "game_run":<int>, "game_type":<int>, "game_time":<float>
-    #Get info: "username":<string>, "game_run":<int>, "game_type":<int>
 api.add_resource(statistics, '/stats')
-api.add_resource(leaderboard, '/leaders')
+api.add_resource(leaderboard, '/leaders/<string:game_mode>/<int:top_number>')
 
 if __name__ == '__main__':
-    app.run(host = "0.0.0.0", port = 5000, debug = True, ssl_context="adhoc")
+    app.run(port = 5000, debug = True)

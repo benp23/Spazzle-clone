@@ -44,16 +44,16 @@ class leaderboard(Resource):
         query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
         rows = cursor.execute(query).fetchall()
 
-    def get(self):
+    def get(self, game_mode, top_number):
         data = leaderboard.parser.parse_args()
         
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
         
-        table_name = "{mode}_leaderboard".format(mode = data['game_mode'])
+        table_name = "{mode}_leaderboard".format(mode = game_mode)
         
         query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
-        rows = cursor.execute(query).fetchmany(data['top_number'])
+        rows = cursor.execute(query).fetchmany(top_number)
         
         return rows
     """
