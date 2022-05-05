@@ -10,6 +10,15 @@ from flask_restful import Resource, reqparse
 class leaderboard(Resource):
 
     parser = reqparse.RequestParser()
+    parser.add_argument('game_mode',
+                        required = False,
+                        help = "No game mode chosen"
+                        )
+    parser.add_argument('top_number',
+                        type = int,
+                        required = False,
+                        help = "Please select a number"
+                        )
     
     '''
         Table:
@@ -36,14 +45,15 @@ class leaderboard(Resource):
         rows = cursor.execute(query).fetchall()
 
     def get(self):
+        data = leaderboard.parser.parse_args()
         
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
         
-        table_name = "level_leaderboard"
+        table_name = "{mode}_leaderboard".format(mode = data['game_mode'])
         
         query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
-        rows = cursor.execute(query).fetchall()
+        rows = cursor.execute(query).fetchmany(data['top_number'])
         
         return rows
     """
