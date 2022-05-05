@@ -16,7 +16,7 @@ class User(Resource):
     Description: Currently only provides User find functionality. Adding more for interacting as userspecific tables
     """
     TABLE_NAME = 'user_table'
-    
+    global game_mode
     parser = reqparse.RequestParser()
     parser.add_argument('username',
                         type = str,
@@ -29,13 +29,17 @@ class User(Resource):
                         help = "Game mode not selected"
                         )
     
+    '''
     def get(self):
         data = User.parser.parse_args()
+        user_table = data['username'] + "_game_total_table"
         if User.find_user(data['username']):
-            return {"message": data['username']+ " is good"}
+            game_run = self.find_current_game_run_number(user_table)
+            return {"game_run":game_run}
         return {"message": data['username'] + " needs to register"}
     #if not in table, return error (do not register)
     #not really needed on its own. Might include as a method to "get all"
+    '''
     
     def post(self):
         '''
@@ -43,15 +47,18 @@ class User(Resource):
             increments the game_run and adds it to the total table
             also adds in the game mode of that run
         '''
+        global game_mode
         data = User.parser.parse_args()
         
         user_table = data['username'] + '_game_total_table'
 
         selection = self.find_current_game_run_number(user_table)
         
-        self.set_next_game_run(user_table, selection, data['game_mode'])
+        new_selection = self.set_next_game_run(user_table, selection, data['game_mode'])
         
-        return {"message": selection}
+        game_mode = data['game_mode']
+        
+        return {"message": new_selection}
     
     def find_current_game_run_number(self, user_table):
         connection = sqlite3.connect('data.db')
@@ -67,6 +74,10 @@ class User(Resource):
             return selection[0]
         return 0
         
+    def get_game_mode(self):
+        global game_mode
+        return game_mode
+        
     def set_next_game_run(self, user_table, game_run_number, game_mode):
         connection = sqlite3.connect('data.db')
         game_run_number += 1
@@ -79,7 +90,7 @@ class User(Resource):
         connection.commit()
         connection.close()
         
-        
+        return game_run_number
     @classmethod
     def find_user(cls, username):
         """
