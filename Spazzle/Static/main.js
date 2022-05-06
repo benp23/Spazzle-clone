@@ -347,8 +347,8 @@ $.when(
         'sort_game',
         'image_game',
         'addition_game',
-        'word_scramble',
-        'number_sort'
+        'word_game',
+        'number_game'
     ];
 
     // The time an individual game starts
