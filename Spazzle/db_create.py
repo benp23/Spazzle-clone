@@ -52,6 +52,7 @@ class db_c:
                 
                 return
         except Error:
+            connection.close()
             return Error
             
     #def create(self):
@@ -71,6 +72,7 @@ class db_c:
             connection.close()
             
         except Error:
+            connection.close()
             return Error
             
 
@@ -89,6 +91,7 @@ class db_c:
             connection.commit()
             connection.close()
         except Error:
+            connection.close()
             return Error
     """
   try:

@@ -25,17 +25,19 @@ class statistics(Resource):
                         required = False,
                         help = "Not a number"
                         )
+    
     def post(self):
         return {"message": "Function not supported"}
 
 
     def get(self, username, stat):
         #json_input = statistics.parser.parse_args()
-        
+            
         d = data(username)
         if stat == 'average':
             return {"average": d.get_average_time()}
-        if stat == 'total_game_count':
+        elif stat == 'total_game_count':
             return {"Games Played: ": d.get_game_count()}
+        elif stat == '
         else:
             return {"message": "Stat not supported"}

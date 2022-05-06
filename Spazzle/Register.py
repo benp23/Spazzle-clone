@@ -32,47 +32,50 @@ class Register(Resource):
         
         data = Register.parser.parse_args()
         
-        connect = sqlite3.connect('data.db')
-        cursor = connect.cursor()
-        
-        username_string = data['username']
-        
-        #return {"Message":username_string}
-        
-        if User.find_user(username_string):
-            return {"message": "{us} is alreadly in use. Please choose another".format(us = username_string)}
-        
-        insert_username_table = '''
-                                INSERT INTO {table} (username, id) Values (?, 0);
-                                '''.format(table=Register.TABLE_NAME)
+        try:
+            connect = sqlite3.connect('data.db')
+            cursor = connect.cursor()
+            
+            username_string = data['username']
+            
+            #return {"Message":username_string}
+            
+            if User.find_user(username_string):
+                return {"message": "{us} is alreadly in use. Please choose another".format(us = username_string)}
+            
+            insert_username_table = '''
+                                    INSERT INTO {table} (username, id) Values (?, 0);
+                                    '''.format(table=Register.TABLE_NAME)
 
-        
-        cursor.execute(insert_username_table, (username_string,))
-        connect.commit()
-        
-        create_total_game_table_for_user = '''
-                                    CREATE TABLE IF NOT EXISTS {user}_game_total_table
-                                    (game_run INT PRIMARY KEY NOT NULL,
-                                    game_mode TEXT NOT NULL,
-                                    level_reached INT,
-                                    game_total_time REAL);
-                                    '''.format(user=username_string)
-                                    
-        
-        create_single_game_table_for_user = '''
-                                    CREATE TABLE IF NOT EXISTS {user}_game_times_table
-                                    (game_run INT NOT NULL,
-                                    game_mode TEXT,
-                                    game_level INT NOT NULL,
-                                    game_type TEXT NOT NULL,
-                                    game_time REAL);
-                                    '''.format(user=username_string)
-                                    
-        db = db_c('data')
-        db.create(create_total_game_table_for_user)
-        db.create(create_single_game_table_for_user)
-        
-        connect.close()
-        return {"message": "{name} Acceped".format(name = data['username'])}
-
+            
+            cursor.execute(insert_username_table, (username_string,))
+            connect.commit()
+            
+            create_total_game_table_for_user = '''
+                                        CREATE TABLE IF NOT EXISTS {user}_game_total_table
+                                        (game_run INT PRIMARY KEY NOT NULL,
+                                        game_mode TEXT NOT NULL,
+                                        level_reached INT,
+                                        game_total_time REAL);
+                                        '''.format(user=username_string)
+                                        
+            
+            create_single_game_table_for_user = '''
+                                        CREATE TABLE IF NOT EXISTS {user}_game_times_table
+                                        (game_run INT NOT NULL,
+                                        game_mode TEXT,
+                                        game_level INT NOT NULL,
+                                        game_type TEXT NOT NULL,
+                                        game_time REAL);
+                                        '''.format(user=username_string)
+                                        
+            db = db_c('data')
+            db.create(create_total_game_table_for_user)
+            db.create(create_single_game_table_for_user)
+            
+            connect.close()
+            return {"message": "{name} Acceped".format(name = data['username'])}
+        except Error:
+            connection.close()
+            return Error
       

@@ -4,6 +4,7 @@
     Description: Set of API classes for post/get methods for game information
 """
 import sqlite3
+from sqlite3 import Error
 from flask_restful import Resource, reqparse
 #using reqparse despite its depreciated status
 
@@ -24,6 +25,34 @@ class leaderboard(Resource):
         Table:
             Position | Username | Game Level | Game_time | Game_Mode 
     '''
+    
+
+    def get(self, game_mode, top_number):
+        #data = leaderboard.parser.parse_args()
+        
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+            
+            table_name = "{mode}_leaderboard".format(mode = game_mode.lower())
+            
+            query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
+            rows = cursor.execute(query).fetchmany(top_number)
+            
+            cursor.close()
+            
+            return rows
+        except Error:
+            connection.close()
+            return Error
+    """
+        add a time aspect to the original post that logs a time doesn't need to be called
+        then do it again on the final post that compares the time to the back end timer +/- some
+        time on either side. 
+        
+        When doing the leaderboard jusst do top 10, it should naturally scale from there. 
+    """
+    """
     def check_leaderboard(self, username, game_time, game_level, game_mode):
         '''
             pulls the table and compares levels/time one by one
@@ -37,31 +66,16 @@ class leaderboard(Resource):
             put the game in teh new opening
         '''
         table_name = game_mode+'_leaderboard'
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        
-        
-        query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
-        rows = cursor.execute(query).fetchall()
-
-    def get(self, game_mode, top_number):
-        #data = leaderboard.parser.parse_args()
-        
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        
-        table_name = "{mode}_leaderboard".format(mode = game_mode.lower())
-        
-        query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
-        rows = cursor.execute(query).fetchmany(top_number)
-        
-        return rows
-    """
-        add a time aspect to the original post that logs a time doesn't need to be called
-        then do it again on the final post that compares the time to the back end timer +/- some
-        time on either side. 
-        
-        When doing the leaderboard jusst do top 10, it should naturally scale from there. 
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+            
+            
+            query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
+            rows = cursor.execute(query).fetchall()
+        except Error:
+            connection.close()
+            return Error
     """
     
     

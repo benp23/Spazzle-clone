@@ -5,6 +5,7 @@
                 
 """
 import sqlite3
+from sqlite3 import Error
 from User import User
 class data:
     """
@@ -34,18 +35,21 @@ class data:
         
         if not User.find_user(username):
            return "Please Register First" 
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        
-        query = "SELECT Count(*) FROM {table}".format(table=TABLE_NAME)
-        
-        rows = cursor.execute(query)
-        count = rows.fetchone()[0]  
-        
-        connection.close()
-        
-        return count
-        
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+            
+            query = "SELECT Count(*) FROM {table}".format(table=TABLE_NAME)
+            
+            rows = cursor.execute(query)
+            count = rows.fetchone()[0]  
+            
+            connection.close()
+            
+            return count
+        except Error:
+            connection.close()
+            return Error
         
     def get_average_time(self):
         
@@ -54,16 +58,25 @@ class data:
         
         if not User.find_user(username):
            return "Please Register First" 
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-                
-        query = "SELECT AVG(game_total_time) from {table}".format(table = TABLE_NAME)
         
-        rows = cursor.execute(query).fetchone()[0]
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+                    
+            query = "SELECT AVG(game_total_time) from {table}".format(table = TABLE_NAME)
+            
+            rows = cursor.execute(query).fetchone()[0]
+            
+            connection.close()
+            
+            return rows
+        except Error:
+            return Error
+
+    def get_average_time(self, game_type):
         
-        connection.close()
-        
-        return rows
+        global username
+        TABLE_NAME= "{name}_game_times_table".format(name = username)
         
     '''
     def get_average_time(self, count):

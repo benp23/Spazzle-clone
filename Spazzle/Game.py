@@ -91,94 +91,105 @@ class total_games(Resource):
         
         table_name = data['username'] + self.TABLE_NAME
         #current_game_run = class_user.find_current_game_run_number(table_name) 
-        
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-      
-        query = '''UPDATE {table} SET level_reached = ?, game_total_time =? WHERE game_run = ?'''.format(table = table_name)
-        cursor.execute(query, (data['level_reached'], data['total_game_time'], game_run))
-        
-        connection.commit()
-        
-        
-        current_game_mode = class_user.get_game_mode()
-        #check leaderboard
-        #lb = leaderboard()
-        #lb.check_leaderboard(data['username'], data['total_game_time'], data['level_reached'], current_game_mode)
-        #push to leaderboard?
-        
-        j= self.check_leaderboard(data['username'], data['level_reached'], data['total_game_time'])
-        
-        connection.close()
-        return {"message": j}
-        #return {"Message": "Game run {game_num} updated".format(game_num = current_game_run), "level_reached":data['level_reached'], "total_game_time":data['total_game_time']}
-        
-        
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+          
+            query = '''UPDATE {table} SET level_reached = ?, game_total_time =? WHERE game_run = ?'''.format(table = table_name)
+            cursor.execute(query, (data['level_reached'], data['total_game_time'], game_run))
+            
+            connection.commit()
+            
+            
+            current_game_mode = class_user.get_game_mode()
+            #check leaderboard
+            #lb = leaderboard()
+            #lb.check_leaderboard(data['username'], data['total_game_time'], data['level_reached'], current_game_mode)
+            #push to leaderboard?
+            
+            j= self.check_leaderboard(data['username'], data['level_reached'], data['total_game_time'])
+            
+            connection.close()
+            return {"message": j}
+            #return {"Message": "Game run {game_num} updated".format(game_num = current_game_run), "level_reached":data['level_reached'], "total_game_time":data['total_game_time']}        
+        except Error:
+            connection.close()
+            return Error
+            
+            
     def check_leaderboard(self, username, level_reached, total_game_time):
         global class_user
         
         current_game_mode = class_user.get_game_mode()
         
         #return table_name
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+            
+            table_name = "{type}_leaderboard".format(type = current_game_mode)
+            query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)        
+            
+            '''
+            Table:
+                Position | Username | Game Level | Game_time | Game_Mode 
+            '''
         
-        table_name = "{type}_leaderboard".format(type = current_game_mode)
-        query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)        
-        
-        '''
-        Table:
-            Position | Username | Game Level | Game_time | Game_Mode 
-        '''
-    
-        rows = cursor.execute(query).fetchall()
-        
-        for row in rows:
-            if row[2] == -1:
-                query = '''UPDATE {table} SET username = ?, game_level =?, game_time = ? WHERE position is ?'''.format(table = table_name)
-                
-                cursor.execute(query, (username, level_reached, total_game_time, row[0]))
-                
-                connection.commit()
-                connection.close()
-                return
-            elif level_reached > row[2]: #if current run is further along
-                self.shift_rows(row[0], username) 
-                
-                #return row[0]
-                query = '''UPDATE {table} SET username = ?, game_level =?, game_time = ? WHERE position is ?'''.format(table = table_name)
-                
-                cursor.execute(query, (username, level_reached, total_game_time, row[0]))
-                
-                connection.commit()
-                connection.close()
-                return
-            elif level_reached == row[2] and current_game_mode != "speed":
-                if total_game_time < row[3]:
-                    #move the rest down
-                    continue
-        return
+            rows = cursor.execute(query).fetchall()
+            
+            for row in rows:
+                if row[2] == -1:
+                    query = '''UPDATE {table} SET username = ?, game_level =?, game_time = ? WHERE position is ?'''.format(table = table_name)
                     
+                    cursor.execute(query, (username, level_reached, total_game_time, row[0]))
+                    
+                    connection.commit()
+                    connection.close()
+                    return
+                elif level_reached > row[2]: #if current run is further along
+                    self.shift_rows(row[0], username) 
+                    
+                    #return row[0]
+                    query = '''UPDATE {table} SET username = ?, game_level =?, game_time = ? WHERE position is ?'''.format(table = table_name)
+                    
+                    cursor.execute(query, (username, level_reached, total_game_time, row[0]))
+                    
+                    connection.commit()
+                    connection.close()
+                    return
+                elif level_reached == row[2] and current_game_mode != "speed":
+                    if total_game_time < row[3]:
+                        #move the rest down
+                        continue
+            return
+        except Error:
+            connection.close()
+            return Error
     
     
     def shift_rows(self, current_row, username):
         current_game_mode = class_user.get_game_mode()
         table_name = current_game_mode+"_leaderboard"
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
         
-        for number in range(99, current_row-1, -1):
-            query = ''' SELECT * FROM {table} WHERE position = ?'''.format(table=table_name)
-            row = cursor.execute(query, (number,)).fetchone()
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
             
-            query = '''UPDATE {table} SET username = ?, game_level =?, game_time = ? WHERE position is ?'''.format(table = table_name)
-            
-            adjusted_number = number + 1
-            
-            cursor.execute(query, (row[1], row[2], row[3], adjusted_number))
-            
-        connection.commit()
-        connection.close
+            for number in range(99, current_row-1, -1):
+                query = ''' SELECT * FROM {table} WHERE position = ?'''.format(table=table_name)
+                row = cursor.execute(query, (number,)).fetchone()
+                
+                query = '''UPDATE {table} SET username = ?, game_level =?, game_time = ? WHERE position is ?'''.format(table = table_name)
+                
+                adjusted_number = number + 1
+                
+                cursor.execute(query, (row[1], row[2], row[3], adjusted_number))
+                
+            connection.commit()
+            connection.close
+        except Error:
+            connection.close()
+            return Error
             
     #DeprecationWarning
     '''def post(self):

@@ -81,16 +81,21 @@ class User(Resource):
     def set_next_game_run(self, user_table, game_run_number, game_mode):
         connection = sqlite3.connect('data.db')
         game_run_number += 1
-        cursor = connection.cursor()
-        
-        query = '''INSERT INTO {table} VALUES (?, ?, 0,0)'''.format(table = user_table)
-        
-        cursor.execute(query, (game_run_number, game_mode))
-        
-        connection.commit()
-        connection.close()
-        
-        return game_run_number
+        try:
+            cursor = connection.cursor()
+            
+            query = '''INSERT INTO {table} VALUES (?, ?, 0,0)'''.format(table = user_table)
+            
+            cursor.execute(query, (game_run_number, game_mode))
+            
+            connection.commit()
+            connection.close()
+            
+            return game_run_number
+        except Error:
+            connection.close()
+            return Error
+            
     @classmethod
     def find_user(cls, username):
         """
@@ -99,15 +104,19 @@ class User(Resource):
             ----------
                 username: Str, Required, Uniques
         """
-        connect = sqlite3.connect('data.db')
-        cursor = connect.cursor()
-        
-        query = "SELECT * FROM {table} WHERE username =?".format(table=cls.TABLE_NAME)
-        
-        result = cursor.execute(query, (username,))
-        row = result.fetchone()
-        connect.close()
-        
-        if row:
-            return True
-        return False
+        try:
+            connect = sqlite3.connect('data.db')
+            cursor = connect.cursor()
+            
+            query = "SELECT * FROM {table} WHERE username =?".format(table=cls.TABLE_NAME)
+            
+            result = cursor.execute(query, (username,))
+            row = result.fetchone()
+            connect.close()
+            
+            if row:
+                return True
+            return False
+        except Error:
+            connection.close()
+            return Error
