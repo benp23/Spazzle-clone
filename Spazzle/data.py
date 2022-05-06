@@ -72,11 +72,23 @@ class data:
             return rows
         except Error:
             return Error
-
-    def get_average_time(self, game_type):
         
+    def get_game_average(self, game_type):
         global username
-        TABLE_NAME= "{name}_game_times_table".format(name = username)
+        TABLE_NAME = "{name}_game_times_table".format(name = username)
+        
+        try:
+            connection = sqlite3.connect('data.db') 
+            cursor = connection.cursor()
+            
+            query = '''SELECT AVG(game_time) from {table} WHERE game_type =?'''.format(table = TABLE_NAME)
+            
+            rows = cursor.execute(query, (game_type,)).fetchone()
+            
+            return rows
+        except Error:
+            connection.close()
+            return Error
         
     '''
     def get_average_time(self, count):
