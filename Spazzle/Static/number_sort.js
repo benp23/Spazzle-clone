@@ -113,6 +113,7 @@ function numFrame(x, y, h, w) {
   this.tile = null;
   this.tileX = x + 5;
   this.tileY = y + 5;
+  this.matchNumber = 0;
   this.draw = function(context) {
     context.beginPath();
     context.strokeStyle = "black";
@@ -132,7 +133,7 @@ function checkNumOrderIsSolved() {
   let orderCorrect = true;
   for (let i = 1; i < numOrder.length; i++) {
     if (numFrames[i - 1].tile !== null && numFrames[i].tile !== null) {
-      if (numFrames[i - 1].matchNumber < numFrames[i].matchNumber) {
+      if (numFrames[i - 1].matchNumber > numFrames[i].matchNumber) {
         orderCorrect = false;
       }
     } else {
@@ -250,6 +251,7 @@ function checkIfNumTileInFrame(x, y, t) {
     t.x = found.tileX;
     t.y = found.tileY;
     found.tile = t
+    found.matchNumber = t.number;
   }
 }
 
