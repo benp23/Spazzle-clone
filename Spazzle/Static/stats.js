@@ -20,9 +20,11 @@ $("#back_button").click(function() {
 (async function() {
 
     // Display error message and return home
-    function statsError(error) {
+    async function statsError(error) {
         if (error === 'error') {
             alert('Unable to read username. Please play a game to register a username. Returning home.');
+        } else if (error === 'Please Register First') {
+            alert('Username doesn\'t exist. Please play a game to register a username. Returning home.');
         } else {
             alert('⚠ Connection error: ' + error.status + ' - ' + error.statusText + ' Returning home.');
         }
@@ -47,6 +49,11 @@ $("#back_button").click(function() {
     // Set username
     const username = readUser();
     $("#user_heading").text(username);
+    // Check if the username isn't in the database
+    let registered = Object.values(await fetchData('/stats/' + username + '/average/total', 'GET'))[0];
+    if (registered === 'Please Register First') {
+        return statsError(registered);
+    }
 
     // Fetch game data
     async function fetchData(url, method, data) {
@@ -126,7 +133,12 @@ $("#back_button").click(function() {
 
     // Modify stat values
     function changeStats(data, labelSelector, labelText, statSelector, time) {
-        if (data === '') {
+        // data is empty when error and null when missing
+        if (data === '' || data === null) {
+            return;
+        }
+        let dataValue = Object.values(data)[0];
+        if (dataValue === 'Stat not supported') {
             return;
         }
         if (labelSelector.length === 0 && statSelector.length === 0) {
@@ -137,7 +149,7 @@ $("#back_button").click(function() {
             statSelector = statsCells.eq(cellsLength - 1);
         }
         labelSelector.text(labelText);
-        let dataValue = Math.round(Object.values(data)[0]);
+        dataValue = Math.round(dataValue);
         if (time === 'seconds') {
             dataValue = formatTime(dataValue);
         }
