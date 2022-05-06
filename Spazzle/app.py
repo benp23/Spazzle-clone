@@ -17,6 +17,7 @@ from leaderboard import leaderboard
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 api=Api(app)
 
 #create database for use
