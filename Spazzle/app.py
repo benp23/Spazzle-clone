@@ -57,4 +57,7 @@ api.add_resource(statistics, '/stats/<string:username>/<string:stat>')
 api.add_resource(leaderboard, '/leaders/<string:game_mode>/<int:top_number>')
 
 if __name__ == '__main__':
-    app.run(port = 5000, debug = True)
+    #http - for debugging
+    #app.run(port = 5000, debug = True)
+    #https enabled
+    app.run(host = "0.0.0.0", port = 5000, ssl_context="adhoc")
