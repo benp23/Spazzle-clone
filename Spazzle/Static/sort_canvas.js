@@ -110,7 +110,7 @@ function token(x, y, h, w, c, f, m) {
 
 // Select the token on the canvas
 function sort_get_select(x, y) {
-    let found;
+    let found = false;
 
     $.each(tokens, (i, token) => {
         if (x > token.x && x < token.x + token.width
