@@ -23,7 +23,8 @@ let mousePosition = { x: 0, y: 0 };
 let selected;
 let wedges = [];
 
-canvasCenter = gameCanvas.width / 2.0
+let canvasCenter = gameCanvas.width / 2.0
+let announcement = new announce();
 // Build wedges
 function buildWedges() {
     // Clear wedges array
@@ -63,6 +64,18 @@ function sleep(level, x) {
         }
     }
     return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+// Let the user know when to begin input
+function announce() {
+    this.x = canvasCenter - 40;
+    this.y = 280;
+    this.draw = function(context) {
+        context.fillStyle = (allowUserInput ? "black" : "white");
+        context.font = '30px san-serif';
+        context.fillText("Begin", this.x, this.y);
+        context.stroke();
+    };
 }
 
 // The wedge function maintains the state of each colored area
@@ -132,6 +145,7 @@ function Draw() {
     $.each(wedges, (i, wedge) => {
         wedge.draw(context);
     });
+    announcement.draw(context);
 }
 
 // Loop over the sequence of highlighting the colors for the user to repeat
@@ -174,6 +188,8 @@ async function PlayGame(level) {
         }
     }
     allowUserInput = true;
+    Clear();
+    Draw();
     while (userOrder.length < colorMatchOrder.length) {
         //console.log("Polling for user input");
         await sleep(level, "poll");
