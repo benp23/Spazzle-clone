@@ -29,7 +29,7 @@ function resizeCanvas() {
 // Get and show leaderboard at the end of game
 async function showLeaderboard(mode, message) {
     finalMessage.text(message);
-    let leaderboardResponse = await fetchData('/leaders/' + mode + '/10', 'GET');
+    let leaderboardResponse = await fetchData('/leaderboard/' + mode + '/10', 'GET');
     let leaderboardTitle;
     if (!leaderboardResponse.ok) {
         leaderboardTitle = 'Failed to retrieve leaderboard. '
