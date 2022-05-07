@@ -34,7 +34,7 @@ class statistics(Resource):
         #json_input = statistics.parser.parse_args()
         #Game Modes: total_runs | speed | level | infinite
         #stat: average | count | highest(total only) | 
-        #game: total | all | levels | color, image, word, sort, add, number
+        #game: total | all_games | levels | color, image, word, sort, add, number
         stat_dat = data(username.capitalize())
         
         #stat_choice = "{game}_{stat}".format(game = game, stat = stat)
@@ -58,7 +58,7 @@ class statistics(Resource):
                 else:
                     return {"message": "No such stat"}   
                     
-            elif game == 'all':
+            elif game == 'all_games':
                 #all games of all runs
                 if stat == 'average':
                     return {"average": stat_dat.get_averages(None, None)}
