@@ -12,15 +12,15 @@ from flask_restful import Resource, reqparse
 class statistics(Resource):
 
     parser = reqparse.RequestParser()
-    parser.addition_argument('username',
+    parser.add_argument('username',
                         required = True,
                         help = "Please enter a username"
                         )
-    parser.addition_argument('stat',
+    parser.add_argument('stat',
                         required = True,
                         help = "Select Stat Desired"
                         )
-    parser.addition_argument('games_back',
+    parser.add_argument('games_back',
                         type = int,
                         required = False,
                         help = "Not a number"
