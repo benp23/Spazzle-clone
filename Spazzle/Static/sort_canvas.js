@@ -20,6 +20,7 @@ let level = 4;
 // Calling this global function from main.js
 resizeCanvas();
 let halfCanvasHeight = gameCanvas.height / 2;
+let tokenSize = 25;
 
 let goals = [];
 let tokens = [];
@@ -51,7 +52,7 @@ function randomSquare(color) {
 	let x = Math.floor(Math.random() * (gameCanvas.width - 228)) + 78;
 	// random start between the height of the canvas for y
 	let y = Math.floor(Math.random() * (gameCanvas.height - 30)) + 2;
-	return new token(x, y, 20, 20, color, true, true);
+	return new token(x, y, tokenSize, tokenSize, color, true, true);
 }
 
 function checkAllTokensAreInGoals() {
@@ -62,13 +63,13 @@ function checkAllTokensAreInGoals() {
         switch(token.color) {
             case 'green':
                 // check all boxes are in green goal
-                if (token.x < 75 && token.y > goals[0].y && token.y < (goals[0].y + 130)) {
+                if (token.x < (goals[0].x + goals[0].height - tokenSize) && token.y > goals[0].y && token.y < (goals[0].y + goals[1].width - tokenSize)) {
                     greenTokensCleared++;
 		        }
                 break;
             case 'blue':
                 // check all boxes are in blue goal
-                if (token.x > goals[1].x && token.y > goals[1].y && token.y < (goals[1].y + 130)) {
+                if (token.x > goals[1].x && token.x < (goals[1].x + goals[1].height - tokenSize) && token.y > goals[1].y && token.y < (goals[1].y + goals[1].width - tokenSize)) {
                     greenTokensCleared++;
 		        }
         }
