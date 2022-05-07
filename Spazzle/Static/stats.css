@@ -63,7 +63,8 @@ body {
     display: flex;
     width: 45%;
     justify-content: center;
-    max-height: 500px;
+    max-height: 60vh;
+    border: 1px solid blue;
     overflow-y: scroll;
     margin: 0 2% 0 2%;
 }
