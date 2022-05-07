@@ -9,7 +9,9 @@ from flask_restful import Resource, reqparse
 #using reqparse despite its depreciated status
 
 class total_games(Resource):
-    """Class for accessing database information related to total game information"""
+    """
+        Class for accessing database information related to total game information
+    """
     global class_user 
     class_user = User()
     TABLE_NAME = '_game_total_table'
@@ -228,6 +230,9 @@ class total_games(Resource):
         
         
 class single_games(Resource):
+    """
+        Class for accessing database information related to individual game types and run information
+    """
     TABLE_NAME = '_game_times_table'
 	
     parser = reqparse.RequestParser()

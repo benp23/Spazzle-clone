@@ -10,7 +10,10 @@ from data import data
 from flask_restful import Resource, reqparse
 
 class statistics(Resource):
-
+    """
+        Class to provide API functionality for statistics and access to data class
+    """
+    """
     parser = reqparse.RequestParser()
     parser.add_argument('username',
                         required = True,
@@ -25,13 +28,23 @@ class statistics(Resource):
                         required = False,
                         help = "Not a number"
                         )
-    
+    """
     def post(self):
         return {"message": "Function not supported"}
 
 
     def get(self, username, game_mode,  stat, game):
-        #json_input = statistics.parser.parse_args()
+        '''
+            Descritpion: Returns statistic information specified
+            Params
+            ---------
+                    game_mode: Str, None return all game modes 
+                    stat: Str
+                    game: Str, None will return all game types
+                    
+        '''
+        
+        
         #Game Modes: total_runs | speed | level | infinite
         #stat: average | count | highest(total only) | 
         #game: total | all_games | levels | color, image, word, sort, addition, number
