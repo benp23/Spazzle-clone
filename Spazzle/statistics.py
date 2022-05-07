@@ -12,15 +12,15 @@ from flask_restful import Resource, reqparse
 class statistics(Resource):
 
     parser = reqparse.RequestParser()
-    parser.add_argument('username',
+    parser.addition_argument('username',
                         required = True,
                         help = "Please enter a username"
                         )
-    parser.add_argument('stat',
+    parser.addition_argument('stat',
                         required = True,
                         help = "Select Stat Desired"
                         )
-    parser.add_argument('games_back',
+    parser.addition_argument('games_back',
                         type = int,
                         required = False,
                         help = "Not a number"
@@ -34,7 +34,7 @@ class statistics(Resource):
         #json_input = statistics.parser.parse_args()
         #Game Modes: total_runs | speed | level | infinite
         #stat: average | count | highest(total only) | 
-        #game: total | all_games | levels | color, image, word, sort, add, number
+        #game: total | all_games | levels | color, image, word, sort, addition, number
         stat_dat = data(username.capitalize())
         
         #stat_choice = "{game}_{stat}".format(game = game, stat = stat)
@@ -68,7 +68,7 @@ class statistics(Resource):
                     return {"message": "No such stat"}
                     
             elif (game == 'color' or game == 'image' or game == 'word' or game == 'levels'
-                    or game == 'sort' or game == 'add' or game == 'number'):
+                    or game == 'sort' or game == 'addition' or game == 'number'):
                 # game_type = lambda f: game == 'levels' else 
                 
                 if game == 'levels':
@@ -108,7 +108,7 @@ class statistics(Resource):
                     return {"message": "No such stat"}
                     
             elif (game == 'color' or game == 'image' or game == 'word' or game == 'level'
-                    or game == 'sort' or game == 'add' or game == 'number'):
+                    or game == 'sort' or game == 'addition' or game == 'number'):
                 # game_type = lambda f: game == 'levels' else 
                 
                 if game == 'level':
