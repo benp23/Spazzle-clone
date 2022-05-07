@@ -52,6 +52,8 @@ function sleep(level, x) {
     let timeout = 800;  // Shortest time when showing user the pattern
     if (x === "short") {
         timeout = 400;  // Delay while redrawing in case same color is chosen
+    } else if (x === "shorter") {
+        timeout = 100;  // Delay while redrawing in case same color is chosen
     } else if (x === "poll") {
         timeout = 100;  // Make delay shortest during user polling
     } else {
@@ -98,6 +100,7 @@ function turnOnColorHandlers() {
             let found = get_select(mousePosition.x, mousePosition.y);
             if (found) {
                 userOrder.push(found.value);
+                flashWedge(found);
             }
         }
     });
@@ -106,6 +109,17 @@ function turnOnColorHandlers() {
 function turnOffColorHandlers() {
     gameCanvasID.off('mousemove');
     gameCanvasID.off('click');
+}
+
+// Flash each color wedge when selected
+async function flashWedge(wedge) {
+    Clear();
+    wedge.selected = true;
+    Draw();
+    await sleep(level, "shorter");
+    Clear();
+    wedge.selected = false;
+    Draw();
 }
 
 // Clear the canvas of any drawn objects
@@ -174,6 +188,7 @@ async function PlayGame(level) {
     }
     if (matched) {
         // Draw a checkmark for success
+	/*
         context.strokeStyle = "black";
         context.lineWidth = 10;
         context.beginPath();
@@ -182,11 +197,14 @@ async function PlayGame(level) {
         context.lineTo((wedges[1].x + width), wedges[1].y);
         context.stroke();
         context.closePath();
+	*/
         // Turn off any event handlers to prevent them from interfering in other games
         turnOffColorHandlers();
+	await sleep(level, "shorter");
         return winGame = true;
     } else {
         // Draw an 'X' for failure
+	/*
         context.strokeStyle = "black";
         context.lineWidth = 10;
         context.beginPath();
@@ -199,6 +217,7 @@ async function PlayGame(level) {
         context.lineTo(wedges[2].x, (wedges[2].y + height));
         context.stroke();
         context.closePath();
+	*/
         if (mode !== 'infinite') {
             gameOver(mode);
         }
