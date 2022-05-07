@@ -30,43 +30,102 @@ class statistics(Resource):
         return {"message": "Function not supported"}
 
 
-    def get(self, username, stat, game):
+    def get(self, username, game_mode,  stat, game):
         #json_input = statistics.parser.parse_args()
-            
-        d = data(username)
+        #Game Modes: total_runs | speed | level | infinite
+        #stat: average | count | highest(total only) | 
+        #game: total | all_games | levels | color, image, word, sort, add, number
+        stat_dat = data(username.capitalize())
         
-        stat_choice = "{game}_{stat}".format(game = game, stat = stat)
-        game_type = "{game}_game".format(game = game)
+        #stat_choice = "{game}_{stat}".format(game = game, stat = stat)
+        #game_type = "{game}_game".format(game = game)
         
-        if stat_choice == 'total_average':
-            return {"average": d.get_average_time()}
-        elif stat_choice == 'total_game_count':
-            return {"Games Played: ": d.get_game_count()}
-        elif (stat_choice == 'color_average' or stat_choice == 'sort_average' or 
-                stat_choice == 'image_average' or stat_choice == 'add_average' or 
-                stat_choice == 'word_average' or stat_choice == 'number_average'):
-            return d.get_game_average(game_type)
+        game_mode = game_mode.lower()
+        stat = stat.lower()
+        game = game.lower()
+        
+        
+        if game_mode == 'total_runs':
+            if game == 'total':
+                #all modes of all runs
+                if stat == 'average':
+                    #average of all modes and total runs
+                    return {"average": stat_dat.get_run_average(None)}
+                elif stat == 'count':
+                    return {"count": stat_dat.get_run_count(None)}
+                elif stat == 'highest':
+                    return {"highest": stat_dat.get_run_highest(None)}
+                else:
+                    return {"message": "No such stat"}   
+                    
+            elif game == 'all_games':
+                #all games of all runs
+                if stat == 'average':
+                    return {"average": stat_dat.get_averages(None, None)}
+                elif stat == 'count':
+                    return {"count": stat_dat.get_counts(None, None)}
+                else:
+                    return {"message": "No such stat"}
+                    
+            elif (game == 'color' or game == 'image' or game == 'word' or game == 'levels'
+                    or game == 'sort' or game == 'add' or game == 'number'):
+                # game_type = lambda f: game == 'levels' else 
+                
+                if game == 'levels':
+                    game_type = "level"
+                else: 
+                    game_type = "{game_name}_game".format(game_name = game)
+                    
+                if stat == 'average':
+                    return {"average": stat_dat.get_averages(None, game_type)}
+                elif stat == 'count':
+                    return {"count": stat_dat.get_counts(None, game_type)}
+                else:
+                    return {"message": "No such stat"}
+            else: 
+                return {"message": "Not a supported game type"} 
+                
+        elif game_mode == 'speed' or game_mode == 'level' or game_mode == 'infinite':
+            if game == 'total':
+                #all modes of all runs
+                if stat == 'average':
+                    #average of all modes and total runs
+                    return {"average": stat_dat.get_run_average(game_mode)}
+                elif stat == 'count':
+                    return {"count": stat_dat.get_run_count(game_mode)}
+                elif stat == 'highest':
+                    return {"highest": stat_dat.get_run_highest(game_mode)}
+                else:
+                    return {"message": "No such stat"}   
+                    
+            elif game == 'all_games':
+                #all games of all runs
+                if stat == 'average':
+                    return {"average": stat_dat.get_averages(game_mode, None)}
+                elif stat == 'count':
+                    return {"count": stat_dat.get_counts(game_mode, None)}
+                else:
+                    return {"message": "No such stat"}
+                    
+            elif (game == 'color' or game == 'image' or game == 'word' or game == 'level'
+                    or game == 'sort' or game == 'add' or game == 'number'):
+                # game_type = lambda f: game == 'levels' else 
+                
+                if game == 'level':
+                    game_type = 'level'
+                else: 
+                    game_type = "{game_name}_game".format(game_name = game)
+                    
+                #return{"":game_type}
+                if stat == 'average':
+                    return {"average": stat_dat.get_averages(game_mode, game_type)}
+                elif stat == 'count':
+                    return {"count": stat_dat.get_counts(game_mode, game_type)}
+                else:
+                    return {"message": "No such stat"}
+            else: 
+                return {"message": "Not a supported game type"}
         else:
-            return {"message": "Stat not supported"}
-            
-            
-    """
-  'color_game',
-        'sort_game',
-        'image_game',
-        'addition_game',
-        'word_scramble',
-        'number_sort'
-        'level'
-        
-        elif stat == 'sort_average':
-            return
-        elif stat == 'image_average':
-            return
-        elif stat == 'add_average':
-            return
-        elif stat == 'word_average':
-            return
-        elif stat == 'number_average':
-            return
-    """
+            return {"message": "Not a Supported Game Mode"}
+    
+   

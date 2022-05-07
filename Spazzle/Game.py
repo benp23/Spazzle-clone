@@ -32,7 +32,7 @@ class total_games(Resource):
                         )
     
     def find_current_game_run_number(self, username):
-        table_name = username + self.TABLE_NAME
+        table_name = username.capitalize() + self.TABLE_NAME
         
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
@@ -69,11 +69,11 @@ class total_games(Resource):
             """
         data = total_games.parser.parse_args()
         
-        if not User.find_user(data['username']):
-            return {"message": "{name} was not found.".format(name = data['username'])}
+        if not User.find_user(data['username'].capitalize()):
+            return {"message": "{name} was not found.".format(name = data['username'].capitalize())}
        
         global class_user
-        table_name = data['username']+self.TABLE_NAME
+        table_name = data['username'].capitalize()+self.TABLE_NAME
         
         row = self.find_game(table_name, data['game_run'])
         if row:
@@ -84,37 +84,36 @@ class total_games(Resource):
     def put(self, game_run):
         data = total_games.parser.parse_args()
         
-        if not User.find_user(data['username']):
+        if not User.find_user(data['username'].capitalize()):
             return {"message": "No user was found."}
         
         global class_user
         
-        table_name = data['username'] + self.TABLE_NAME
+        table_name = data['username'].capitalize() + self.TABLE_NAME
         #current_game_run = class_user.find_current_game_run_number(table_name) 
-        try:
-            connection = sqlite3.connect('data.db')
-            cursor = connection.cursor()
-          
-            query = '''UPDATE {table} SET level_reached = ?, game_total_time =? WHERE game_run = ?'''.format(table = table_name)
-            cursor.execute(query, (data['level_reached'], data['total_game_time'], game_run))
-            
-            connection.commit()
-            
-            
-            current_game_mode = class_user.get_game_mode()
+        #try:
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = '''UPDATE {table} SET level_reached = ?, game_total_time =? WHERE game_run = ?'''.format(table = table_name)
+        cursor.execute(query, (data['level_reached'], data['total_game_time'], game_run))
+        connection.commit()
+        current_game_mode = class_user.get_game_mode()
             #check leaderboard
             #lb = leaderboard()
             #lb.check_leaderboard(data['username'], data['total_game_time'], data['level_reached'], current_game_mode)
             #push to leaderboard?
+        if current_game_mode == "infinite":
+            return {"Message":"Updated"}
+        add_leaderboard = self.check_leaderboard(data['username'].capitalize(), data['level_reached'], data['total_game_time'])
             
-            j= self.check_leaderboard(data['username'], data['level_reached'], data['total_game_time'])
-            
+        if add_leaderboard:
             connection.close()
-            return {"message": j}
+            return {"message": "Added"}
+        return {"message": "something went wrong"}
             #return {"Message": "Game run {game_num} updated".format(game_num = current_game_run), "level_reached":data['level_reached'], "total_game_time":data['total_game_time']}        
-        except Error:
-            connection.close()
-            return Error
+        #except Error:
+            #connection.close()
+            #return Error
             
             
     def check_leaderboard(self, username, level_reached, total_game_time):
@@ -145,7 +144,7 @@ class total_games(Resource):
                     
                     connection.commit()
                     connection.close()
-                    return
+                    return True
                 elif level_reached > row[2]: #if current run is further along
                     self.shift_rows(row[0], username) 
                     
@@ -156,12 +155,12 @@ class total_games(Resource):
                     
                     connection.commit()
                     connection.close()
-                    return
+                    return True
                 elif level_reached == row[2] and current_game_mode != "speed":
                     if total_game_time < row[3]:
                         #move the rest down
                         continue
-            return
+            return False
         except Error:
             connection.close()
             return Error
@@ -264,41 +263,45 @@ class single_games(Resource):
     def post(self):
         data = single_games.parser.parse_args()
         
-        if not User.find_user(data['username']):
+        if not User.find_user(data['username'].capitalize()):
             return {"message": "No user was found."}
         
         
-        table_name = data['username']+self.TABLE_NAME
+        table_name = data['username'].capitalize() +self.TABLE_NAME
         
         #row = self.find_game(table_name, data['game_run'])
-   
+        
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
         query = "INSERT INTO {table} VALUES (?,?,?,?,?)".format(table=table_name)
-        cursor.execute(query, (data['game_run'], data['game_mode'], data['game_level'], 
-                                data['game_type'], data['game_time']))
+        cursor.execute(query, (data['game_run'], data['game_mode'].lower(), data['game_level'], 
+                                    data['game_type'], data['game_time']))
         connection.commit()
         connection.close()
-        
+            
         return {"message": "Game Run added", "game_run":data['game_run'], "game_mode":data['game_mode'], 
-                "game_level": data['game_level'], "game_type": data['game_type'], "game_time": data['game_time']}
+                    "game_level": data['game_level'], "game_type": data['game_type'], "game_time": data['game_time']}
         
         
     def get(self):
         return {"message": "No functionality"}
     
+    
     @classmethod
     def find_game(cls, table_name, game_run):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        
-        query = "SELECT * FROM {table} WHERE game_run =?".format(table = table_name) 
-        #This is going to grab all rows; can specific w/ this lster
-        
-        rows = cursor.execute(query, (game_run,))
-        
-        row = rows.fetchone()
-        
-        return row
-        
+        try:
+            connection = sqlite3.connect('data.db')
+            cursor = connection.cursor()
+            
+            query = "SELECT * FROM {table} WHERE game_run =?".format(table = table_name) 
+            #This is going to grab all rows; can specific w/ this lster
+            
+            rows = cursor.execute(query, (game_run,))
+            
+            row = rows.fetchone()
+            
+            return row
+        except Error:
+            connection.close()
+            return

@@ -10,17 +10,7 @@ from flask_restful import Resource, reqparse
 
 class leaderboard(Resource):
 
-    parser = reqparse.RequestParser()
-    parser.add_argument('game_mode',
-                        required = True,
-                        help = "No game mode chosen"
-                        )
-    parser.add_argument('top_number',
-                        type = int,
-                        required = True,
-                        help = "Please select a number"
-                        )
-    
+
     '''
         Table:
             Position | Username | Game Level | Game_time | Game_Mode 
@@ -45,43 +35,6 @@ class leaderboard(Resource):
         except Error:
             connection.close()
             return Error
-    """
-        add a time aspect to the original post that logs a time doesn't need to be called
-        then do it again on the final post that compares the time to the back end timer +/- some
-        time on either side. 
-        
-        When doing the leaderboard jusst do top 10, it should naturally scale from there. 
-    """
-    """
-    def check_leaderboard(self, username, game_time, game_level, game_mode):
-        '''
-            pulls the table and compares levels/time one by one
-            based on game mode calls methods?
-                if new game time and level higher then replace
-                if new game time or level is higher compare further?
-                    
-                if new game time is less than time and level move on
-            if faster/higher level bubble sort the others down
-            
-            put the game in teh new opening
-        '''
-        table_name = game_mode+'_leaderboard'
-        try:
-            connection = sqlite3.connect('data.db')
-            cursor = connection.cursor()
-            
-            
-            query = '''SELECT * FROM {table} ORDER BY position ASC'''.format(table = table_name)
-            rows = cursor.execute(query).fetchall()
-        except Error:
-            connection.close()
-            return Error
-    """
     
     
-        
-
-    
-    
-
 

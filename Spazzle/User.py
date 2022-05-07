@@ -50,7 +50,7 @@ class User(Resource):
         global game_mode
         data = User.parser.parse_args()
         
-        user_table = data['username'] + '_game_total_table'
+        user_table = '{name}_game_total_table'.format(name = data['username'].capitalize())
 
         selection = self.find_current_game_run_number(user_table)
         

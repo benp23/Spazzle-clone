@@ -36,7 +36,7 @@ class Register(Resource):
             connect = sqlite3.connect('data.db')
             cursor = connect.cursor()
             
-            username_string = data['username']
+            username_string = data['username'].capitalize()
             
             #return {"Message":username_string}
             
@@ -74,7 +74,7 @@ class Register(Resource):
             db.create(create_single_game_table_for_user)
             
             connect.close()
-            return {"message": "{name} Acceped".format(name = data['username'])}
+            return {"message": "{name} Acceped".format(name = data['username'].capitalize())}
         except Error:
             connection.close()
             return Error
