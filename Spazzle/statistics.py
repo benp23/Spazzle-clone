@@ -74,7 +74,7 @@ class statistics(Resource):
             elif game == 'all_games':
                 #all games of all runs
                 if stat == 'average':
-                    return {"average": stat_dat.get_averages(None, None)}
+                    return {"average": round(stat_dat.get_averages(None, None)/1000,2)}
                 elif stat == 'count':
                     return {"count": stat_dat.get_counts(None, None)}
                 else:
@@ -90,7 +90,7 @@ class statistics(Resource):
                     game_type = "{game_name}_game".format(game_name = game)
                     
                 if stat == 'average':
-                    return {"average": stat_dat.get_averages(None, game_type)}
+                    return {"average": round(stat_dat.get_averages(None, game_type)/1000,2)}
                 elif stat == 'count':
                     return {"count": stat_dat.get_counts(None, game_type)}
                 else:
@@ -114,7 +114,7 @@ class statistics(Resource):
             elif game == 'all_games':
                 #all games of all runs
                 if stat == 'average':
-                    return {"average": stat_dat.get_averages(game_mode, None)}
+                    return {"average": round(stat_dat.get_averages(game_mode, None)/1000)}
                 elif stat == 'count':
                     return {"count": stat_dat.get_counts(game_mode, None)}
                 else:
@@ -131,7 +131,7 @@ class statistics(Resource):
                     
                 #return{"":game_type}
                 if stat == 'average':
-                    return {"average": stat_dat.get_averages(game_mode, game_type)}
+                    return {"average": round(stat_dat.get_averages(game_mode, game_type)/1000,2)}
                 elif stat == 'count':
                     return {"count": stat_dat.get_counts(game_mode, game_type)}
                 else:
