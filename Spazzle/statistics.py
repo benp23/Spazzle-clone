@@ -114,7 +114,7 @@ class statistics(Resource):
             elif game == 'all_games':
                 #all games of all runs
                 if stat == 'average':
-                    return {"average": round(stat_dat.get_averages(game_mode, None)/1000)}
+                    return {"average": round(stat_dat.get_averages(game_mode, None)/1000,2)}
                 elif stat == 'count':
                     return {"count": stat_dat.get_counts(game_mode, None)}
                 else:
