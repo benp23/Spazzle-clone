@@ -1,7 +1,8 @@
 /* Title: Spazzle Stats Page
  * Author: Ben Paul
  * Date: 04/10/22
- * Description: Change stats on stats page
+ * Description: Change stats on the stats page. Makes many API calls to retrieve and display player
+ * statistical information.
  */
 
 // Send user back home
@@ -11,7 +12,7 @@ $("#back_button").click(function() {
 
 (async function() {
    
-    // Display error message and return home
+    // Display error message and returns home
     function statsError(error) {
         if (error === 'error') {
             alert('Unable to read username. Please play a game to register a username. Returning home.');
@@ -83,7 +84,8 @@ $("#back_button").click(function() {
     // Set username
     const username = readUser();
     $("#user_heading").text(username);
-    // Check if the username isn't in the database
+
+    // Check if the username isn't in the database, then return error
     let registeredResponse = await fetchData('/stats/' + username + '/total_runs/average/total', 'GET');
     let registered = Object.values(registeredResponse)[0];
     if (registered !== undefined && registered.Message === 'Please Register First') {
@@ -97,6 +99,7 @@ $("#back_button").click(function() {
         console.log(seconds);
         let minutes = 0;
         let hours = 0;
+        // Convert seconds to 0:00:00 format
         if (seconds >= 60) {
             minutes = Math.floor(seconds / 60);
             seconds %= 60;
@@ -149,7 +152,6 @@ $("#back_button").click(function() {
             }
         }
         // Highest fetch call returns array as value, get the level and time
-        console.log(dataValue);
         if (labelText === 'HIGHEST LEVEL' && dataValue !== '--') {
             dataValue = dataValue[2];
         }
@@ -157,7 +159,7 @@ $("#back_button").click(function() {
             dataValue = dataValue[3];
         }
         labelSelector.text(labelText);
-        // Format data value
+        // Format data value based on type
         if (dataValue !== '--') {
             dataValue = Math.round(dataValue);
             if (type === 'seconds') {
@@ -167,6 +169,7 @@ $("#back_button").click(function() {
                 dataValue += ' ms'
             }
         }
+        // Write the stat value to the page
         statSelector.text(dataValue);
     }
 
@@ -306,6 +309,7 @@ $("#back_button").click(function() {
         highlightsNumbers.eq(3).text('0:00:00');
         statsCells.text('--');
         let optionSelected = $(this).val();
+        // Make API calls for stats based on the mode selected
         switch (optionSelected) {
             case '1':
                 await callStatsForMode('total_runs');

@@ -1,17 +1,20 @@
 /* Title: Spazzle Menu Homepage
  * Author: Ben Paul
  * Date: 04/08/22
- * Description: Adds event listeners and animations/effects to menu.html 
+ * Description: Adds event listeners and animations/effects to menu.html. Sets username/game_mode/muted cookies.
+ * Makes an API call to register a username.
  */
 
 (function() {
 
+    // Set cookie expiration date
     let cookieExpire = "expires=Wed, 16 Jan 2030 12:00:00 UTC";
 
     $("#github_button").click(function() {
         window.open('https://github.com/Wheels17/Spazzle', '_blank').focus();
     });
 
+    // Read whether sound is true/false from cookies
     function readSound() {
         let getCookies = decodeURIComponent(document.cookie);
         let mutedMatch = getCookies.match(/muted=(.*?)(;|$)/);
@@ -27,6 +30,7 @@
     }
     readSound();
     
+    // Change sound to true/false in cookies
     $("#ON, #OFF").click(function() {
         $("#ON, #OFF").css('background-color', '#eeeeee');
         $(this).css('background-color', '#add8e6');
@@ -80,6 +84,7 @@
     // Show/hide modal window functions
     let thisMode;
     $("#speed_mode, #level_mode, #infinite_mode").click(function() {
+        // Set the mode depending on what was clicked
         switch ($(this).attr('id')) {
             case "speed_mode":
                 thisMode = 'speed';
@@ -93,6 +98,7 @@
         }
         $("#username_modal").show();
     });
+    // Close the modal window
     $("#close_modal").click(function() {
         $("#username_modal").hide();
     });
@@ -154,7 +160,7 @@
     }
     verifyUser();
 
-    // Overwrite username cookie and game mode cookie
+    // Overwrite username cookie and game mode cookies
     function overwriteUser(username) {
         let usernameCookie = encodeURIComponent(username);
         document.cookie = "username=" + usernameCookie + "; " + cookieExpire;

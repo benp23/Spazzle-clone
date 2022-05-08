@@ -91,24 +91,28 @@ function drawNumbers() {
             numbers[i].y += numbers[i].speedY;
             // check if the number has reached a side of the canvas,
             // then reverse speed positive to negative or negative to positive
+            // right side of canvas
             if (numbers[i].x > gameCanvas.width - fontSize) {
                 numbers[i].speedX *= -1;
                 numbers[i].x = gameCanvas.width - fontSize;
                 numbers[i].x += numbers[i].speedX;
                 number_boop.play();
             }
+            // left side of canvas
             if (numbers[i].x < 0) {
                 numbers[i].speedX *= -1;
                 numbers[i].x = 0;
                 numbers[i].x += numbers[i].speedX;
                 number_boop.play();
             }
+            // bottom of canvas
             if (numbers[i].y > gameCanvas.height) {
                 numbers[i].speedY *= -1;
                 numbers[i].y = gameCanvas.height;
                 numbers[i].y += numbers[i].speedY;
                 number_boop.play();
             }
+            // top of canvas
             if (numbers[i].y < fontSize) {
                 numbers[i].speedY *= -1;
                 numbers[i].y = fontSize;
@@ -147,11 +151,13 @@ function checkAnswer(guess) {
     for (let i = 0; i < numbers.length; i++) {
         sum += numbers[i].number;
     }
+    // correct answer
     if (guess === sum) {
         $("#answer_text").text("Correct!").css('color', '#00FF00').show();
         addition = false;
         cancelAnimationFrame(animation);
         return winGame = true;
+    // wrong answer
     } else {
         $("#answer_text").text("Wrong!").css('color', '#FF0000').show();
         if (mode !== 'infinite') {

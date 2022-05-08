@@ -1,3 +1,10 @@
+/*
+ * Description: This is the main game javascript responsible for rotating the puzzles on the /game page.
+ * Many POST/PUT/GET API calls are performed to track and display player statistics.
+ * Also contains timer functions, UI functions, and processes a game over when the game ends.
+ */
+
+
 // Global variables
 let winGame = false;
 let endGame = false;
@@ -31,6 +38,7 @@ async function showLeaderboard(mode, message) {
     finalMessage.text(message);
     let leaderboardResponse = await fetchData('/leaderboard/' + mode + '/10', 'GET');
     let leaderboardTitle;
+    // Write leaderboard title and leaderboard items
     if (!leaderboardResponse.ok) {
         leaderboardTitle = 'Failed to retrieve leaderboard. '
             + leaderboardResponse.status + ' - ' + leaderboardResponse.statusText;
@@ -40,6 +48,7 @@ async function showLeaderboard(mode, message) {
             leaderboardData = data;
             console.log(leaderboardData);
         });
+        // Fill in leaderboard list with data from leaderboardResponse
         leaderboardTitle = mode.charAt(0).toUpperCase() + mode.slice(1) + ' Leaderboard';
         let leaderboardItems = $(".leaderboard_item");
         for (let i = 0; i < leaderboardItems.length; i++) {
@@ -55,6 +64,7 @@ async function showLeaderboard(mode, message) {
             }
         }
     }
+    // Display leaderboard
     $("#leaderboard_title").text(leaderboardTitle);
     leaderboardModal.show();
     returnButton.click(function() {
@@ -72,6 +82,7 @@ function changeTime(amount) {
     let seconds = totalTime;
     let minutes = 0;
     let hours = 0;
+    // Convert seconds to 0:00:00 format
     if (seconds >= 60) {
         minutes = Math.floor(seconds / 60);
         seconds %= 60;
@@ -90,6 +101,7 @@ function changeTime(amount) {
     minutes = minutes.toString();
     hours = hours.toString();
     gameTimerText = hours + ':' + minutes + ':' + seconds;
+    // Change game timer text when game is still running
     if (!endGame) {
         gameTimer.text(gameTimerText);
     }
@@ -113,7 +125,7 @@ function failMessage(response) {
     }, 4000);
 }
 
-// Post game data
+// Fetch game data (GET/POST/PUT)
 async function fetchData(url, method, data) {
     console.log(data);
     let options = {
@@ -145,13 +157,6 @@ async function fetchData(url, method, data) {
     if (!response.ok) {
         // Notify the user of any API errors
         failMessage(response);
-    } else {
-        // Log data
-        /*
-        await response.json().then(function(data) {
-            console.log(data);
-        });
-        */
     }
     return response;
 }
@@ -161,7 +166,7 @@ async function gameOver(mode) {
     // Stop game win condition and timer
     endGame = true;
     let finalMessage = '';
-    // Final POST to server
+    // Final PUT to server
     if (mode !== 'error') {
         if (mode === 'speed') {
             totalTime = speedModeSeconds - totalTime;
@@ -179,6 +184,7 @@ async function gameOver(mode) {
             + finalMessage + ' Returning home.');
         window.location.href = '/';
     }
+    // End the game differently depending on the mode
     if (mode === 'speed') {
         finalMessage = 'Game Over! Congratulations, you reached level ' + level + '!' + finalMessage;
         showLeaderboard(mode, finalMessage);
@@ -192,13 +198,13 @@ async function gameOver(mode) {
     if (mode === 'infinite') {
         let finalTime = changeTime(0);
         finalMessage = 'Game Over! Congratulations, you reached level ' + level + ' with a time of '
-            + finalTime + '!' + finalMessage;
+            + finalTime + '!' + finalMessage + ' Returning home.';
         alert(finalMessage);
         window.location.href = '/';
     }
 }
 
-// Read sound on/off from cookies
+// Read whether sound is on/off from cookies
 function readSound() {
     let getCookies = decodeURIComponent(document.cookie);
     if (getCookies === '') {
@@ -324,7 +330,7 @@ $.when(
     setTimeout(timer, oneSecond);
 
     /* Call this after every game is completed to reset everything. Games can
-     * show and/or build their required html/css in the individual game files
+     * show and/or build their required html/css in the individual game files.
      */
     function eraseGame() {
         gameDiv.empty();
@@ -361,7 +367,7 @@ $.when(
         startNumberSort,
     ];
 
-    // Game names for POST data
+    // Game names for POSTing data
     let gameNames = [
         'color_game',
         'sort_game',
@@ -384,6 +390,7 @@ $.when(
         levelNumber.text('Level ' + currentLevel);
         for (let i = 0; i < gameFunctions.length; i++) {
             gameFunctions[i](currentLevel);
+            // Wait for the puzzle's win condition
             await waitForWin();
             if (endGame) {
                 return;
