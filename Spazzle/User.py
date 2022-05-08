@@ -1,8 +1,8 @@
 """
     File: User.py
     Authors: Spencer Wheeler, Benjamin Paul, Troy Scites
-    Description: Class to make and store user information.
-                Limited functions as of now, will add more later.
+    Description: Class to make and store user information. 
+                Methods increment and start db log for game runs
                 
 """
 
@@ -15,6 +15,7 @@ class User(Resource):
     """
     Description: Currently only provides User find functionality. Adding more for interacting as userspecific tables
     """
+    
     TABLE_NAME = 'user_table'
     global game_mode
     parser = reqparse.RequestParser()
@@ -29,23 +30,13 @@ class User(Resource):
                         help = "Game mode not selected"
                         )
     
-    '''
-    def get(self):
-        data = User.parser.parse_args()
-        user_table = data['username'] + "_game_total_table"
-        if User.find_user(data['username']):
-            game_run = self.find_current_game_run_number(user_table)
-            return {"game_run":game_run}
-        return {"message": data['username'] + " needs to register"}
-    #if not in table, return error (do not register)
-    #not really needed on its own. Might include as a method to "get all"
-    '''
     
     def post(self):
         '''
-            Post will be when page loads
-            increments  the game_run and adds it to the total table
-            also adds in the game mode of that run
+            Description: Called at page load for preparing tables for other methods and classes
+            Parameters
+            ----------
+                None
         '''
         global game_mode
         data = User.parser.parse_args()
@@ -61,6 +52,12 @@ class User(Resource):
         return {"message": new_selection}
     
     def find_current_game_run_number(self, user_table):
+        """
+            Description: returns the current game run number for the user and use in other classes
+            Parameters
+            ----------
+                user_table: St
+        """
         connection = sqlite3.connect('data.db')
         
         cursor = connection.cursor()
@@ -79,6 +76,14 @@ class User(Resource):
         return game_mode
         
     def set_next_game_run(self, user_table, game_run_number, game_mode):
+        """
+            Description: Sets up the next game run in the user's table
+            Parameters
+            ----------
+                user_table: Str
+                game_run_number: Int
+                game_mode: Str
+        """
         connection = sqlite3.connect('data.db')
         game_run_number += 1
         try:

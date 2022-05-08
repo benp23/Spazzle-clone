@@ -9,21 +9,16 @@ from sqlite3 import Error
 from User import User
 class data:
     """
-        
-        To DO:
-            implement error for user registration 
+        Class for accessing database information related to total game information
     """
     tempuser = User()
     username = ''
     
     def __init__(self, name):
+        '''
+            initializes the class object
+        '''
         global username
-        #if not tempuser.find_user(name_):
-           #return "Please Register First" 
-        username = name.capitalize()
-        
-    def change_username(self, name):
-        global username 
         #if not tempuser.find_user(name_):
            #return "Please Register First" 
         username = name.capitalize()
@@ -31,6 +26,13 @@ class data:
     
     #COUNTS
     def get_run_count(self, game_mode):
+        '''
+            Descritpion: Returns number of game runs for passed game mode
+            Params
+            ---------
+                    game_mode: Str, None return all game modes 
+                    
+        '''
         global username
         TABLE_NAME = username + '_game_total_table'
         
@@ -54,6 +56,14 @@ class data:
             return Error
         
     def get_counts(self, game_mode, game_type):
+        '''
+            Descritpion: Returns number of game type passed played
+            Params
+            ---------
+                    game_mode: Str, None returns all game modes 
+                    game_type: Str, None returns all game types
+                    
+        '''
         global username
         TABLE_NAME = "{name}_game_times_table".format(name = username)
         
@@ -91,6 +101,13 @@ class data:
         
     #AVERAGES
     def get_run_average(self, game_mode):
+        '''
+            Descritpion: Returns average time of game runs for passed game mode
+            Params
+            ---------
+                    game_mode: Str, None return all game modes 
+                    
+        '''
         global username
         TABLE_NAME = username + '_game_total_table'
         
@@ -114,6 +131,14 @@ class data:
             return 
     
     def get_averages(self, game_mode, game_type):
+        '''
+            Descritpion: Returns average of game type passed played
+            Params
+            ---------
+                    game_mode: Str, None returns all game modes 
+                    game_type: Str, None returns all game types
+                    
+        '''
         global username
         TABLE_NAME = "{name}_game_times_table".format(name = username)
         
@@ -150,6 +175,13 @@ class data:
     
     #HIGHEST
     def get_run_highest(self, game_mode):
+        '''
+            Descritpion: Returns game run with the best time for passed game mode
+            Params
+            ---------
+                    game_mode: Str, None return all game modes 
+                    
+        '''
         global username
         TABLE_NAME = username + '_game_total_table'
         
