@@ -77,25 +77,33 @@ class data:
             query = '''SELECT count(*) from {table}'''.format(table = TABLE_NAME)
             rows = cursor.execute(query).fetchone()[0]
             connection.close()
-            return rows
+            if rows:
+                return rows
+            return 0
                     
         elif game_mode is None: #All Modes | specific games
             query = '''SELECT count(*) from {table} WHERE game_type =?'''.format(table = TABLE_NAME)
             rows = cursor.execute(query, (game_type,)).fetchone()[0]
             connection.close()
-            return rows
+            if rows:
+                return rows
+            return 0
                     
         elif game_type is None: # Specific Modes | all games
             query = '''SELECT count(*) from {table} WHERE game_mode = ?'''.format(table = TABLE_NAME)
             rows = cursor.execute(query, (game_mode,)).fetchone()[0]
             connection.close()
-            return rows
+            if rows:
+                return rows
+            return 0
                     
                 #specific modes | specific games
         query = '''SELECT count(*) from {table} WHERE game_mode =? AND game_type = ?'''.format(table = TABLE_NAME)
         rows = cursor.execute(query, (game_mode, game_type)).fetchone()[0]
         connection.close()
-        return rows
+        if rows:
+            return rows
+        return 0
          
         
         
@@ -125,7 +133,9 @@ class data:
             query = '''SELECT AVG(game_total_time) from {table} WHERE game_mode = ?'''.format(table = TABLE_NAME)
             rows = cursor.execute(query, (game_mode,)).fetchone()
             connection.close()
-            return rows
+            if rows:
+                return rows
+            return 0
         except Error:
             connection.close()
             return 
@@ -149,25 +159,32 @@ class data:
                 query = '''SELECT AVG(game_time) from {table}'''.format(table = TABLE_NAME)
                 rows = cursor.execute(query).fetchone()[0]
                 connection.close()
-                return rows
-                
+                if rows:
+                    return rows
+                return 0
             elif game_mode is None: # All Modes | Specific Games
                 query = '''SELECT AVG(game_time) from {table} WHERE game_type =?'''.format(table = TABLE_NAME)
                 rows = cursor.execute(query, (game_type,)).fetchone()[0]
                 connection.close()
-                return rows
+                if rows:
+                    return rows
+                return 0
                 
             elif game_type is None: # Specific Modes | All Games
                 query = '''SELECT AVG(game_time) from {table} WHERE game_mode =?'''.format(table = TABLE_NAME)
                 rows = cursor.execute(query, (game_mode,)).fetchone()[0]
                 connection.close()
-                return rows
+                if rows:
+                    return rows
+                return 0
                 
             else: # Specific Modes | Specific Games
                 query = '''SELECT AVG(game_time) from {table} WHERE game_mode =? AND game_type =?'''.format(table = TABLE_NAME)
                 rows = cursor.execute(query, (game_mode, game_type)).fetchone()[0]
                 connection.close()
-                return rows
+                if rows:
+                    return rows
+                return 0
 
         except Error:
             connection.close()
