@@ -161,8 +161,8 @@ $("#back_button").click(function() {
         labelSelector.text(labelText);
         // Format data value based on type
         if (dataValue !== '--') {
-            dataValue = Math.round(dataValue);
             if (type === 'seconds') {
+                dataValue = Math.round(dataValue);
                 dataValue = formatTime(dataValue);
             }
             if (type === 'milliseconds') {
