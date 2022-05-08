@@ -20,7 +20,9 @@
         '/static/images/card-hexagon.svg',
         '/static/images/card-heart.svg',
         '/static/images/card-cylinder.svg'
-    ];
+    ]; 
+    // Sound for when the user clicks a card
+    let shuffleSound = new Howl({src: ['/static/sounds/shuffle.mp3'], mute: muted, volume: 1.0});
 
     function findCardAmountAndRow(thisLevel) {
         const number = thisLevel < maxLevel ? (thisLevel + 1) * 2 : (maxLevel + 1) * 2;
@@ -112,6 +114,7 @@
         let thisCardID = thisCard.attr('id');
         let cardIndex = parseInt(thisCard.attr('card_index'));
         let cardMatch = cardArray[cardIndex];
+        shuffleSound.play();
         if (cardMatch.clicked) {
             return;
         } else {

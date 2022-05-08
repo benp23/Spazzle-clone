@@ -25,6 +25,8 @@ let numTiles = [];
 let numTileSelected = null;
 //let numFrameSelected = null;
 let numSortMousePosition = {x: 0, y: 0};
+// Sound for when a user drags and drops
+let placeSound = new Howl({src: ['/static/sounds/place.mp3'], mute: muted, volume: 1.0});
 
 /*
 canvas.height = gameCanvas.height();
@@ -248,6 +250,7 @@ function turnOnNumSortHandlers() {
 function checkIfNumTileInFrame(x, y, t) {
   let found = numSortFrameSelected(x, y);
   if (found) {
+    placeSound.play();
     t.x = found.tileX;
     t.y = found.tileY;
     found.tile = t

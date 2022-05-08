@@ -6,8 +6,37 @@
 
 (function() {
 
+    let cookieExpire = "expires=Wed, 16 Jan 2030 12:00:00 UTC";
+
     $("#github_button").click(function() {
         window.open('https://github.com/Wheels17/Spazzle', '_blank').focus();
+    });
+
+    function readSound() {
+        let getCookies = decodeURIComponent(document.cookie);
+        let mutedMatch = getCookies.match(/muted=(.*?)(;|$)/);
+        if (mutedMatch !== null && mutedMatch[1] !== undefined && mutedMatch[1] !== '') {
+            if (mutedMatch[1] === 'true') {
+                $("#OFF").css('background-color', '#add8e6');
+            } else {
+                $("#ON").css('background-color', '#add8e6');
+            }
+        } else {
+            $("#ON").css('background-color', '#add8e6');
+        }
+    }
+    readSound();
+    
+    $("#ON, #OFF").click(function() {
+        $("#ON, #OFF").css('background-color', '#eeeeee');
+        $(this).css('background-color', '#add8e6');
+        let muted;
+        if ($(this).attr('id') == 'OFF') {
+            muted = true;
+        } else {
+            muted = false;
+        }
+        document.cookie = "muted=" + muted + "; " + cookieExpire;
     });
 
     // Menu selection animations/effects
@@ -126,7 +155,6 @@
     verifyUser();
 
     // Overwrite username cookie and game mode cookie
-    let cookieExpire = "expires=Wed, 16 Jan 2030 12:00:00 UTC";
     function overwriteUser(username) {
         let usernameCookie = encodeURIComponent(username);
         document.cookie = "username=" + usernameCookie + "; " + cookieExpire;

@@ -198,6 +198,26 @@ async function gameOver(mode) {
     }
 }
 
+// Read sound on/off from cookies
+function readSound() {
+    let getCookies = decodeURIComponent(document.cookie);
+    if (getCookies === '') {
+        return false;
+    }
+    let soundMatch = getCookies.match(/muted=(.*?)(;|$)/);
+    if (soundMatch !== null && soundMatch[1] !== undefined && soundMatch[1] !== '') {
+        if (soundMatch[1] === 'true') {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+// Set muted true/false
+const muted = readSound();
+
 // Read username from cookies
 function readUser() {
     let getCookies = decodeURIComponent(document.cookie);

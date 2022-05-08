@@ -29,6 +29,8 @@ const wordsLevel4 = [ "extract", "bargain", "descent", "cabinet", "harvest", "ep
 const wordsLevel5 = [ "conceive", "dedicate", "aviation", "fragrant", "pressure", "specimen", "omission", "decrease", "designer", "epicalyx", "fraction", "assembly", "buttocks", "congress", "economic", "restrain", "prestige", "joystick", "question", "surprise", "building", "flourish", "recovery", "personal", "mourning", "champion", "campaign", "folklore", "ordinary", "feminine", "disorder", "analysis", "birthday", "suppress", "scenario", "complain", "category", "prospect", "conflict", "audience" ];
 const wordsLevel6 = [ "mechanism", "volunteer", "recommend", "violation", "hierarchy", "waterfall", "principle", "strategic", "dimension", "intensify", "horseshoe", "secretion", "rebellion", "ignorance", "vegetable", "offspring", "policeman", "interrupt", "privilege", "intention", "modernize", "eliminate", "parameter", "ostracize", "favourite", "cigarette", "isolation", "colleague", "formulate", "chocolate", "relevance", "publisher", "highlight", "undermine", "directory", "tradition", "transport", "criticism", "automatic", "admission" ];
 const wordsLevel7 = [ "depression", "excitement", "researcher", "unpleasant", "girlfriend", "mechanical", "mastermind", "curriculum", "possession", "censorship", "reasonable", "protection", "gregarious", "background", "motivation", "connection", "productive", "indication", "continuous", "repetition", "exhibition", "attraction", "allocation", "helicopter", "instrument", "reluctance", "difference", "enthusiasm", "prevalence", "conspiracy", "perception", "management", "negligence", "chimpanzee", "corruption", "generation", "confession", "basketball", "exaggerate", "relaxation" ];
+// Sound for when a user drags and drops
+let dropSound = new Howl({src: ['/static/sounds/drop.mp3'], mute: muted, volume: 1.0});
 
 // This function uses the arrays of words to build a list based on the level.
 // Once the word is selected, it is set in a global variable
@@ -257,6 +259,7 @@ function turnOnWordHandlers() {
 function checkIfTileInFrame(x, y, t) {
   let found = word_frame_selected(x, y);
   if (found) {
+    dropSound.play();
     t.x = found.tileX;
     t.y = found.tileY;
     found.tile = t

@@ -99,23 +99,32 @@ body {
     color: #007aff;
 }
 
-#options_text {
+#sound_text, #sound_divider {
+    font-size: 28px;
+    font-family: 'Arbutus Slab', sans-serif;
+    color: #333333;
+    vertical-align: middle;
+    display: inline;
+}
+
+#ON {
     font-size: 28px;
     font-family: 'Arbutus Slab', sans-serif;
     color: #333333;
     vertical-align: middle;
     display: inline;
     cursor: pointer;
+    padding: 0 5px;
 }
 
-#options_icon {
-    width: 30px;
+#OFF {
+    font-size: 28px;
+    font-family: 'Arbutus Slab', sans-serif;
     color: #333333;
-    padding-right: 5px;
     vertical-align: middle;
     display: inline;
     cursor: pointer;
-
+    padding: 0 5px;
 }
 
 #menu_table {

@@ -24,6 +24,9 @@ let addition = false;
 // green, yellow, blue, red
 const colors = ['#00FF00', '#FFFF00', '#0000FF', '#FF0000'];
 
+// Sound for when a number hits an edge
+let number_boop = new Howl({src: ['/static/sounds/number_boop.wav'], mute: muted, volume: 0.5});
+
 // Constructor for new numbers
 function number(number, x, y, fs, c, sx, sy) {
     this.number = number;
@@ -92,21 +95,25 @@ function drawNumbers() {
                 numbers[i].speedX *= -1;
                 numbers[i].x = gameCanvas.width - fontSize;
                 numbers[i].x += numbers[i].speedX;
+                number_boop.play();
             }
             if (numbers[i].x < 0) {
                 numbers[i].speedX *= -1;
                 numbers[i].x = 0;
                 numbers[i].x += numbers[i].speedX;
+                number_boop.play();
             }
             if (numbers[i].y > gameCanvas.height) {
                 numbers[i].speedY *= -1;
                 numbers[i].y = gameCanvas.height;
                 numbers[i].y += numbers[i].speedY;
+                number_boop.play();
             }
             if (numbers[i].y < fontSize) {
                 numbers[i].speedY *= -1;
                 numbers[i].y = fontSize;
                 numbers[i].y += numbers[i].speedY;
+                number_boop.play();
             }
             // draw the number
             context.fillStyle = numbers[i].color;

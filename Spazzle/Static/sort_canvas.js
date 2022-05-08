@@ -21,6 +21,8 @@ let level = 4;
 resizeCanvas();
 let halfCanvasHeight = gameCanvas.height / 2;
 let tokenSize = 25;
+// Sound for all tokens are in the goals
+let fanfare = new Howl({src: ['/static/sounds/fanfare.mp3'], mute: muted, volume: 0.8});
 
 let goals = [];
 let tokens = [];
@@ -76,6 +78,7 @@ function checkAllTokensAreInGoals() {
     });
     if ((greenTokensCleared + blueTokensCleared) === tokens.length) {
         console.log("All cleared!");
+        fanfare.play();
         clearSort();
         // Turn off any event handlers to prevent them from interfering in other games
         turnOffSortHandlers();

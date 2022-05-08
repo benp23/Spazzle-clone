@@ -23,16 +23,22 @@ let mousePosition = { x: 0, y: 0 };
 let selected;
 let wedges = [];
 
+// Sounds for color game
+let A3_tone = new Howl({src: ['/static/sounds/A3_tone.wav'], mute: muted, volume: 1.0});
+let C4_tone = new Howl({src: ['/static/sounds/C4_tone.wav'], mute: muted, volume: 1.0});
+let E4_tone = new Howl({src: ['/static/sounds/E4_tone.wav'], mute: muted, volume: 1.0});
+let A4_tone = new Howl({src: ['/static/sounds/A4_tone.wav'], mute: muted, volume: 1.0});
+
 let canvasCenter = gameCanvas.width / 2.0
 let announcement = new announce();
 // Build wedges
 function buildWedges() {
     // Clear wedges array
     wedges = [];
-    wedges[0] = new wedge((canvasCenter - width - 5), 70, "blue", "#00ccff", "blue", 0);
-    wedges[1] = new wedge((canvasCenter + 5), 70, "green", "#66ff33", "green", 1);
-    wedges[2] = new wedge((canvasCenter - width - 5), 155, "red", "#ff00ff", "red", 2);
-    wedges[3] = new wedge((canvasCenter + 5), 155, "yellow", "#ff9900", "yellow", 3);
+    wedges[0] = new wedge((canvasCenter - width - 5), 70, "blue", "#00ccff", "blue", 0, A3_tone);
+    wedges[1] = new wedge((canvasCenter + 5), 70, "green", "#66ff33", "green", 1, C4_tone);
+    wedges[2] = new wedge((canvasCenter - width - 5), 155, "red", "#ff00ff", "red", 2, E4_tone);
+    wedges[3] = new wedge((canvasCenter + 5), 155, "yellow", "#ff9900", "yellow", 3, A4_tone);
 };
 
 // Find the wedge where the user clicks
@@ -79,13 +85,14 @@ function announce() {
 }
 
 // The wedge function maintains the state of each colored area
-function wedge(x, y, c, sc, n, v) {
+function wedge(x, y, c, sc, n, v, snd) {
     this.x = x;
     this.y = y;
     this.color = c;
     this.strokeColor = sc;
     this.name = n;
     this.value = v;
+    this.sound = snd;
     this.selected = false;
     this.draw = function(context) {
         context.beginPath();
@@ -111,6 +118,7 @@ function turnOnColorHandlers() {
     gameCanvasID.on("click", function() {
         if (allowUserInput) {
             let found = get_select(mousePosition.x, mousePosition.y);
+            if (found !== undefined) found.sound.play();
             if (found) {
                 userOrder.push(found.value);
                 flashWedge(found);
@@ -163,6 +171,7 @@ async function PlayGame(level) {
             let currentWedge = wedges[colorMatchOrder[i]];
             currentWedge.selected = true;
             Draw();
+            currentWedge.sound.play();
             await sleep(level);
             Clear();
             currentWedge.selected = false;
@@ -180,6 +189,7 @@ async function PlayGame(level) {
             currentWedge = wedges[current];
             currentWedge.selected = true;
             Draw();
+            currentWedge.sound.play();
             await sleep(level);
             Clear();
             currentWedge.selected = false;
