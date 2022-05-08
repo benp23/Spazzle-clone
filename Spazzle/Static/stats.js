@@ -166,7 +166,7 @@ $("#back_button").click(function() {
                 dataValue = formatTime(dataValue);
             }
             if (type === 'milliseconds') {
-                dataValue += ' ms'
+                dataValue += ' s'
             }
         }
         // Write the stat value to the page
